@@ -11,7 +11,6 @@ const Dimension2 = 2
 const Dimension3 = 3
 
 using StaticArrays
-using LinearAlgebra
 using Parameters
 using Dates
 using WriteVTK

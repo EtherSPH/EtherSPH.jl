@@ -10,7 +10,7 @@ using Parameters
 using ProgressBars
 
 const dim = 2
-const dr = 0.01
+const dr = 0.02
 const h = 3 * dr
 const gap = dr
 
@@ -126,7 +126,7 @@ function createRectangleParticles(
     width::Float64,
     height::Float64,
     reference_dr::Float64;
-    modifyOnParticle!::Function = (p::ParticleType) -> nothing
+    modifyOnParticle!::Function = (p) -> nothing
 )::Vector{ParticleType}
     particles = Vector{ParticleType}()                 # create particles, first an empty array
     n_along_x = Int64(width / reference_dr |> round)
@@ -194,7 +194,7 @@ append!(system, particles)
 vtp_writer = VTPWriter()
 @inline getPressure(p::Particle)::Float64 = p.p_
 @inline getVelocity(p::Particle)::Vector2D = p.v_vec_
-addScalar!(vtp_writer, "pressure", getPressure)
+addScalar!(vtp_writer, "Pressure", getPressure)
 addVector!(vtp_writer, "velocity", getVelocity)
 vtp_writer.step_digit_ = 4
 vtp_writer.file_name_ = "dam_break_2d"

@@ -14,16 +14,8 @@ const RealVector{Dimension} = StaticArrays.MArray{Tuple{Dimension}, Float64, 1, 
 const Vector2D = RealVector{Dimension2}
 const Vector3D = RealVector{Dimension3}
 
-macro Vec2D(args)
-    return :(Vector2D($args))
-end
-
-macro Vec3D(args)
-    return :(Vector3D($args))
-end
-
-macro Vec(args...)
-    return :(RealVector{$(length(args))}($(args...)))
+macro Vec(args)
+    return :(StaticArrays.@MArray($args))
 end
 
 @inline function Vector0(dimension::Int64 = 2)::RealVector{dimension}
