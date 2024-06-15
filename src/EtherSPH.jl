@@ -22,6 +22,7 @@ include("Geometry/Geometry.jl")
 include("Function/Function.jl")
 include("Core/Core.jl")
 include("Post/Post.jl")
+include("SPH/SPH.jl")
 
 @inline greet() = println("Welcome to EtherSPH.jl, let's break down to particles!")
 

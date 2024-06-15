@@ -6,12 +6,12 @@
  =#
 
 @testset "Vector" begin
-    x2 = @Vec [1.0, 2.0]
-    y2 = @Vec [3.0, 4.0]
+    x2 = @MArray [1.0, 2.0]
+    y2 = @MArray [3.0, 4.0]
     @test x2 + y2 ≈ Vector2D(4.0, 6.0)
 
-    x3 = @Vec [1.0, 2.0, 3.0]
-    y3 = @Vec [4.0, 5.0, 6.0]
+    x3 = @MArray [1.0, 2.0, 3.0]
+    y3 = @MArray [4.0, 5.0, 6.0]
     @test x3 + y3 ≈ Vector3D(5.0, 7.0, 9.0)
 
     @test Vector0(2) ≈ Vector2D(0.0, 0.0)
@@ -60,7 +60,6 @@ end
 end
 
 @testset "CartesianGridIndex" begin
-
     end_2d = CartesianIndex2D(3, 4)
     cri = CartesianRange(end_2d)
     @test begin

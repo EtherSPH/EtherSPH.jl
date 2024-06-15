@@ -33,3 +33,5 @@ end
     end
     return true
 end
+
+include("Rectangle.jl")

@@ -62,7 +62,7 @@ end
 @inline function Base.push!(cell::Cell{Dimension}, value::Int64) where {Dimension}
     Base.Threads.lock(cell.thread_lock_)
     try
-        push!(cell.contained_particle_index_list_, value)
+        orderedPush!(cell.contained_particle_index_list_, value)
     finally
         Base.Threads.unlock(cell.thread_lock_)
     end

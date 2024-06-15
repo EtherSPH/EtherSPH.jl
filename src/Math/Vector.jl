@@ -14,10 +14,6 @@ const RealVector{Dimension} = StaticArrays.MArray{Tuple{Dimension}, Float64, 1, 
 const Vector2D = RealVector{Dimension2}
 const Vector3D = RealVector{Dimension3}
 
-macro Vec(args)
-    return :(StaticArrays.@MArray($args))
-end
-
 @inline function Vector0(dimension::Int64 = 2)::RealVector{dimension}
     return RealVector{dimension}(zeros(Float64, dimension))
 end
@@ -42,8 +38,20 @@ end
 
 # * ========== basic vector operations ========== * #
 
-@inline function dot(x::RealVector{Dimension}, y::RealVector{Dimension})::Float64 where {Dimension}
-    return sum(x .* y)
+@inline function dot(x::Vector2D, y::Vector2D)::Float64
+    return x[1] * y[1] + x[2] * y[2]
+end
+
+@inline function dot(x::Vector3D, y::Vector3D)::Float64
+    return x[1] * y[1] + x[2] * y[2] + x[3] * y[3]
+end
+
+@inline function minusplus(x::Vector2D, y::Vector2D, z::Vector2D)::Vector2D
+    return Vector2D(x[1] - y[1] + z[1], x[2] - y[2] + z[2])
+end
+
+@inline function minusplus(x::Vector3D, y::Vector3D, z::Vector3D)::Vector3D
+    return Vector3D(x[1] - y[1] + z[1], x[2] - y[2] + z[2], x[3] - y[3] + z[3])
 end
 
 @inline function norm(x::RealVector{Dimension})::Float64 where {Dimension}
@@ -55,5 +63,5 @@ end
 end
 
 @inline function cross(x::Vector3D, y::Vector3D)::Vector3D
-    @inbounds return Vector3D(x[2] * y[3] - x[3] * y[2], x[3] * y[1] - x[1] * y[3], x[1] * y[2] - x[2] * y[1])
+    return Vector3D(x[2] * y[3] - x[3] * y[2], x[3] * y[1] - x[1] * y[3], x[1] * y[2] - x[2] * y[1])
 end

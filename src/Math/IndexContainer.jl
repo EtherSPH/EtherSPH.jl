@@ -38,10 +38,7 @@ end
 @inline setlength!(index_container::IndexContainer, length::Int64) = index_container.length_ = length
 
 @inline function reset!(index_container::IndexContainer)::Nothing
-    # * reset all item in index_list_ to 0, instead of removing them
-    @simd for i in eachindex(index_container)
-        @inbounds index_container[i] = 0
-    end
+    # * reset the length of the index_list_ to 0, keep the capacity in memory
     setlength!(index_container, 0)
     return nothing
 end
@@ -60,5 +57,18 @@ end
     end
     setlength!(index_container, length(index_container) + 1)
     setindex!(index_container, value, length(index_container))
+    return nothing
+end
+
+@inline function orderedPush!(index_container::IndexContainer, value::Int64)::Nothing
+    # * push the value to the index_list_ in an ordered way
+    # * such operation will benifit performance a little
+    push!(index_container, value)
+    latest_index = length(index_container)
+    @inbounds while latest_index > 1 && index_container[latest_index] < index_container[latest_index - 1]
+        index_container[latest_index], index_container[latest_index - 1] =
+            index_container[latest_index - 1], index_container[latest_index]
+        latest_index -= 1
+    end
     return nothing
 end

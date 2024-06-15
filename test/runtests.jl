@@ -7,6 +7,7 @@
 
 using Test
 using EtherSPH
+using StaticArrays
 using Parameters
 
 @testset "EtherSPH" begin

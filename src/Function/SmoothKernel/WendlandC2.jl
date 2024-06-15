@@ -10,6 +10,7 @@ kWendlandC2SigmaList = [0.0, 7.0 / 4.0 / pi, 21.0 / 16.0 / pi]
 
 struct WendlandC2{Dimension} <: SmoothKernel{Dimension}
     h_::Float64
+    h_inv_::Float64
     radius_::Float64
     sigma_::Float64
     kernel_value_0_::Float64
@@ -18,24 +19,25 @@ end
 @inline function WendlandC2{Dimension}(radius::Float64) where {Dimension}
     radius_ratio = kWendlandC2RadiusRatio
     h = radius / radius_ratio
+    h_inv = 1.0 / h
     sigma = kWendlandC2SigmaList[Dimension] / h^Dimension
     kernel_value_0 = sigma
-    return WendlandC2{Dimension}(h, radius, sigma, kernel_value_0)
+    return WendlandC2{Dimension}(h, h_inv, radius, sigma, kernel_value_0)
 end
 
-@inline function kernelValue(r::Float64, kernel::WendlandC2{Dimension})::Float64 where {Dimension}
-    q::Float64 = r / kernel.h_
+@inline @fastmath function kernelValue(r::Float64, kernel::WendlandC2{Dimension})::Float64 where {Dimension}
+    q::Float64 = r * kernel.h_inv_
     if q < 2.0
-        return kernel.sigma_ * (2.0 - q)^4 * (1.0 + 2.0 * q) / 16.0
+        return kernel.sigma_ * (2.0 - q)^4 * (1.0 + 2 * q) * 0.0625
     else
         return 0.0
     end
 end
 
-@inline function kernelGradient(r::Float64, kernel::WendlandC2{Dimension})::Float64 where {Dimension}
-    q::Float64 = r / kernel.h_
+@inline @fastmath function kernelGradient(r::Float64, kernel::WendlandC2{Dimension})::Float64 where {Dimension}
+    q::Float64 = r * kernel.h_inv_
     if q < 2.0
-        return -kernel.sigma_ / kernel.h_ * 5.0 / 8.0 * q * (2.0 - q)^3
+        return -kernel.sigma_ * kernel.h_inv_ * 0.625 * q * (2.0 - q)^3
     else
         return 0.0
     end

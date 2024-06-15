@@ -85,7 +85,7 @@ end
     vectors_list = [zeros(Float64, Dimension, n_particles) for _ in 1:length(vtp_writer.vector_name_list_)]
     Threads.@threads for i in eachindex(particle_system)
         @inbounds type[i] = getType(particle_system[i])
-        @inbounds positions[:, i] = getPosition(particle_system[i])
+        @inbounds positions[:, i] .= particle_system[i].x_vec_
         for j in 1:length(vtp_writer.scalar_name_list_)
             @inbounds scalars_list[j][i] = vtp_writer.getScalarFunctions_[j](particle_system[i])
         end

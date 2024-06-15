@@ -14,7 +14,7 @@ const dr = 0.02
 const h = 3 * dr
 const gap = dr
 
-const kernel = WendlandC2{dim}(h)
+const kernel = CubicSpline{dim}(h)
 
 @inline function W(r::Float64)::Float64
     return kernelValue(r, kernel)
@@ -37,7 +37,7 @@ const c = 10 * sqrt(2 * water_height * gravity)
 const mu = 1e-3
 
 const dt = 0.1 * h / c
-const t_end = 3.0
+const t_end = 4.0
 const output_dt = 100 * dt
 const density_filter_dt = 10 * dt
 
@@ -126,7 +126,7 @@ function createRectangleParticles(
     width::Float64,
     height::Float64,
     reference_dr::Float64;
-    modifyOnParticle!::Function = (p) -> nothing
+    modifyOnParticle!::Function = (p) -> nothing,
 )::Vector{ParticleType}
     particles = Vector{ParticleType}()                 # create particles, first an empty array
     n_along_x = Int64(width / reference_dr |> round)
@@ -150,8 +150,7 @@ const y0 = 0.0
 
 particles = Particle[]
 
-fluid_particles =
-    createRectangleParticles(Particle, x0, y0, water_width, water_height, dr)
+fluid_particles = createRectangleParticles(Particle, x0, y0, water_width, water_height, dr)
 append!(particles, fluid_particles)
 
 @inline function initialWall!(p::Particle)::Nothing
@@ -195,7 +194,7 @@ vtp_writer = VTPWriter()
 @inline getPressure(p::Particle)::Float64 = p.p_
 @inline getVelocity(p::Particle)::Vector2D = p.v_vec_
 addScalar!(vtp_writer, "Pressure", getPressure)
-addVector!(vtp_writer, "velocity", getVelocity)
+addVector!(vtp_writer, "Velocity", getVelocity)
 vtp_writer.step_digit_ = 4
 vtp_writer.file_name_ = "dam_break_2d"
 vtp_writer.output_path_ = "demo/results/dam_break_2d"

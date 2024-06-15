@@ -130,7 +130,7 @@ end
     # * 3. add particles to to_be_removed_cell_
     Threads.@threads for i in eachindex(particle_system)
         @inbounds if !isInsideCellLinkListStrictCalculationDomain(
-            getPosition(particle_system.particles_[i]),
+            particle_system[i].x_vec_,
             particle_system.cell_link_list_,
         )
             push!(particle_system.cell_link_list_.to_be_removed_cell_, i)
@@ -145,8 +145,8 @@ end
     end
     # * 4. add particles to cells
     Threads.@threads for i in eachindex(particle_system)
-        position = getPosition(particle_system.particles_[i])
-        cartesian_index = getPositionCartesianIndexFromCellLinkList(position, particle_system.cell_link_list_)
+        @inbounds cartesian_index =
+            getPositionCartesianIndexFromCellLinkList(particle_system[i].x_vec_, particle_system.cell_link_list_)
         @inbounds push!(particle_system.cell_link_list_.cells_[cartesian_index], i)
     end
     return nothing

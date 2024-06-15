@@ -21,6 +21,12 @@
     - [ ] collapse dry
     - [ ] lid-driven cavity
     - [ ] poiseuille flow
+    - [ ] flow over cylinder
     - [ ] natural convection cavity
     - [ ] natural convection circular
+    - [ ] ...
+5. Others
+    - [ ] `DEM` method
+    - [ ] documentation github pages
+    - [ ] neural network acceleration
     - [ ] ...

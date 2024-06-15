@@ -10,6 +10,7 @@ const kCubicSplineSigmaList = [2.0 / 3.0, 10.0 / 7.0 / pi, 1.0 / pi]
 
 struct CubicSpline{Dimension} <: SmoothKernel{Dimension}
     h_::Float64
+    h_inv_::Float64
     radius_::Float64
     sigma_::Float64
     kernel_value_0_::Float64
@@ -18,28 +19,29 @@ end
 @inline function CubicSpline{Dimension}(radius::Float64) where {Dimension}
     radius_ratio = kCubicSplineRadiusRatio
     h = radius / radius_ratio
+    h_inv = 1.0 / h
     sigma = kCubicSplineSigmaList[Dimension] / h^Dimension
     kernel_value_0 = sigma
-    return CubicSpline{Dimension}(h, radius, sigma, kernel_value_0)
+    return CubicSpline{Dimension}(h, h_inv, radius, sigma, kernel_value_0)
 end
 
-@inline function kernelValue(r::Float64, kernel::CubicSpline{Dimension})::Float64 where {Dimension}
-    q::Float64 = r / kernel.h_
+@inline @fastmath function kernelValue(r::Float64, kernel::CubicSpline{Dimension})::Float64 where {Dimension}
+    q::Float64 = r * kernel.h_inv_
     if q < 1.0
-        return kernel.sigma_ / 4.0 * (3.0 * q^2 * (q - 2.0) + 4.0)
+        return kernel.sigma_ * (3 * q * q * (q - 2.0) + 4.0) * 0.25
     elseif q < 2.0
-        return kernel.sigma_ / 4.0 * (2.0 - q)^3
+        return kernel.sigma_ * (2.0 - q)^3 * 0.25
     else
         return 0.0
     end
 end
 
-@inline function kernelGradient(r::Float64, kernel::CubicSpline{Dimension})::Float64 where {Dimension}
-    q::Float64 = r / kernel.h_
+@inline @fastmath function kernelGradient(r::Float64, kernel::CubicSpline{Dimension})::Float64 where {Dimension}
+    q::Float64 = r * kernel.h_inv_
     if q < 1.0
-        return kernel.sigma_ / kernel.h_ * 3.0 / 4.0 * q * (3.0 * q - 4.0)
+        return kernel.sigma_ * kernel.h_inv_ * 0.75 * q * (3 * q - 4.0)
     elseif q < 2.0
-        return -kernel.sigma_ / kernel.h_ * 3.0 / 4.0 * (2.0 - q)^2
+        return -kernel.sigma_ * kernel.h_inv_ * 0.75 * (2.0 - q)^2
     else
         return 0.0
     end
