@@ -1,5 +1,9 @@
+# ignore foler
 draft/*
-.VSCodeCounter/*
 profile/*
-*.vtp
+.VSCodeCounter/*
+example/results/*
+
+# ignore files
 *.ipynb
+*.vtp

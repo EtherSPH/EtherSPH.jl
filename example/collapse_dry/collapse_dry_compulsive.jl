@@ -1,6 +1,6 @@
 #=
   @ author: bcynuaa <bcynuaa@163.com> | callm1101 <Calm.Liu@outlook.com> | vox-1 <xur2006@163.com>
-  @ date: 2024/06/14 18:13:02
+  @ date: 2024/06/15 18:14:50
   @ license: MIT
   @ description:
  =#
@@ -14,7 +14,7 @@ const dr = 0.02
 const h = 3 * dr
 const gap = dr
 
-const kernel = CubicSpline{dim}(h)
+const kernel = WendlandC2{dim}(h)
 
 @inline function W(r::Float64)::Float64
     return kernelValue(r, kernel)
@@ -64,24 +64,27 @@ end
     gap_::Float64 = dr
     sum_kernel_weight_::Float64 = 0.0
     sum_kernel_weighted_value_::Float64 = 0.0
+    # * wall normal vector
+    normal_vec_::Vector2D = Vector2D(0.0, 0.0)
 end
 
-@inline function continuity!(p::Particle, q::Particle, rpq::Vector2D, r::Float64)::Nothing
-    if p.type_ == WALL_TAG && q.type_ == WALL_TAG
-        return nothing
+@inline function continuity!(p::Particle, q::Particle, rpq::RealVector{dim}, r::Float64)::Nothing where {dim}
+    if p.type_ == FLUID_TAG && q.type_ == FLUID_TAG
+        EtherSPH.libTraditionalContinuity!(p, q, rpq, r; kernel_gradient = DW(r))
     end
-    EtherSPH.libTraditionalContinuity!(p, q, rpq, r; kernel_gradient = DW(r))
     return nothing
 end
 
 @inline function updateDensityAndPressure!(p::Particle)::Nothing
-    EtherSPH.libUpdateDensity!(p; dt = dt)
-    p.p_ = getPressureFromDensity(p.rho_)
+    if p.type_ == FLUID_TAG
+        EtherSPH.libUpdateDensity!(p; dt = dt)
+        p.p_ = getPressureFromDensity(p.rho_)
+    end
     return nothing
 end
 
 @inline function momentum!(p::Particle, q::Particle, rpq::Vector2D, r::Float64)::Nothing
-    if p.type_ == FLUID_TAG
+    if p.type_ == FLUID_TAG && q.type_ == FLUID_TAG
         w = W(r)
         dw = DW(r)
         rw = W(0.5 * (p.gap_ + q.gap_))
@@ -94,7 +97,13 @@ end
             kernel_value = w,
             reference_kernel_value = rw,
         )
-        EtherSPH.libTraditionalViscosityForce!(p, q, rpq, r; kernel_gradient = dw, h = h / 2)
+        EtherSPH.libTraditionalViscosityForce!(p, q, rpq, r; kernel_gradient = dw, h = 0.5 * h)
+        return nothing
+    elseif p.type_ == FLUID_TAG && q.type_ == WALL_TAG
+        dw = DW(r)
+        EtherSPH.libTraditionalViscosityForce!(p, q, rpq, r; kernel_gradient = dw, h = 0.5 * h)
+        EtherSPH.libCompulsiveForce!(p, q, rpq, r; h = 0.5 * h)
+        return nothing
     end
     return nothing
 end
@@ -123,6 +132,13 @@ end
 const x0 = 0.0
 const y0 = 0.0
 
+@inline function modifyFluid!(p::Particle)::Nothing
+    depth = water_height - p.x_vec_[2]
+    p.p_ = rho_0 * gravity * depth
+    p.rho_ = p.p_ / c^2 + rho_0
+    return nothing
+end
+
 @inline function modifyWall!(p::Particle)::Nothing
     p.type_ = WALL_TAG
     p.mu_ *= 1000
@@ -131,24 +147,65 @@ end
 
 const fluid_column = Rectangle(Vector2D(x0, y0), Vector2D(x0 + water_width, y0 + water_height))
 
-const bottom_wall_column =
-    Rectangle(Vector2D(x0 - wall_width, y0 - wall_width), Vector2D(x0 + box_width + wall_width, y0))
+const bottom_wall_column = Rectangle(Vector2D(x0, y0 - wall_width), Vector2D(x0 + box_width, y0))
 
 const left_wall_column = Rectangle(Vector2D(x0 - wall_width, y0), Vector2D(x0, y0 + box_height))
-
 const right_wall_column =
     Rectangle(Vector2D(x0 + box_width, y0), Vector2D(x0 + box_width + wall_width, y0 + box_height))
 
-particles = Particle[]
-fluid_particles = createParticles(Particle, gap, fluid_column)
-bottom_wall_particles = createParticles(Particle, gap, bottom_wall_column; modify! = modifyWall!)
-left_wall_particles = createParticles(Particle, gap, left_wall_column; modify! = modifyWall!)
-right_wall_particles = createParticles(Particle, gap, right_wall_column; modify! = modifyWall!)
+const left_corner_wall_column = Rectangle(Vector2D(x0 - wall_width, y0 - wall_width), Vector2D(x0, y0))
+const right_corner_wall_column =
+    Rectangle(Vector2D(x0 + box_width, y0 - wall_width), Vector2D(x0 + box_width + wall_width, y0))
 
-append!(particles, fluid_particles)
-append!(particles, bottom_wall_particles)
-append!(particles, left_wall_particles)
-append!(particles, right_wall_particles)
+@inline function modifyBottomWall!(p::Particle)::Nothing
+    modifyWall!(p)
+    p.normal_vec_ .= VectorY(2)
+    return nothing
+end
+
+@inline function modifyLeftWall!(p::Particle)::Nothing
+    modifyWall!(p)
+    p.normal_vec_ .= VectorX(2)
+    return nothing
+end
+
+@inline function modifyRightWall!(p::Particle)::Nothing
+    modifyWall!(p)
+    p.normal_vec_ .= -VectorX(2)
+    return nothing
+end
+
+@inline function modifyLeftCornerWall!(p::Particle)::Nothing
+    modifyWall!(p)
+    p.normal_vec_ .= (VectorY(2) + VectorX(2)) .* (1 / sqrt(2))
+    return nothing
+end
+
+@inline function modifyRightCornerWall!(p::Particle)::Nothing
+    modifyWall!(p)
+    p.normal_vec_ .= (-VectorX(2) + VectorY(2)) .* (1 / sqrt(2))
+    return nothing
+end
+
+particles = Particle[]
+fluid_particles = createParticles(Particle, gap, fluid_column; modify! = modifyFluid!)
+bottom_wall_particles = createParticles(Particle, gap, bottom_wall_column; modify! = modifyBottomWall!)
+left_wall_particles = createParticles(Particle, gap, left_wall_column; modify! = modifyLeftWall!)
+right_wall_particles = createParticles(Particle, gap, right_wall_column; modify! = modifyRightWall!)
+left_corner_wall_particles = createParticles(Particle, gap, left_corner_wall_column; modify! = modifyLeftCornerWall!)
+right_corner_wall_particles = createParticles(Particle, gap, right_corner_wall_column; modify! = modifyRightCornerWall!)
+
+append!(
+    particles,
+    vcat(
+        fluid_particles,
+        bottom_wall_particles,
+        left_wall_particles,
+        right_wall_particles,
+        left_corner_wall_particles,
+        right_corner_wall_particles,
+    ),
+)
 
 const lower = Vector2D(x0 - wall_width, y0 - wall_width)
 const upper = Vector2D(x0 + box_width + wall_width, y0 + box_height + wall_width)
@@ -158,11 +215,13 @@ append!(system, particles)
 vtp_writer = VTPWriter()
 @inline getPressure(p::Particle)::Float64 = p.p_
 @inline getVelocity(p::Particle)::Vector2D = p.v_vec_
+@inline getNormal(p::Particle)::Vector2D = p.normal_vec_
 addScalar!(vtp_writer, "Pressure", getPressure)
 addVector!(vtp_writer, "Velocity", getVelocity)
+addVector!(vtp_writer, "Normal", getNormal)
 vtp_writer.step_digit_ = 4
-vtp_writer.file_name_ = "collapse_dry_same_"
-vtp_writer.output_path_ = "example/results/collapse_dry/collapse_dry_same"
+vtp_writer.file_name_ = "collapse_dry_compulsive_"
+vtp_writer.output_path_ = "example/results/collapse_dry/collapse_dry_compulsive"
 
 function main()::Nothing
     t = 0.0

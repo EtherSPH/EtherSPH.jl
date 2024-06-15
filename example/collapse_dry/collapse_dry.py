@@ -180,6 +180,9 @@ class CollapseDryPostProcess:
     pass
 
 same: CollapseDryPostProcess = CollapseDryPostProcess(key_word="same")
-
 same.viewPlot()
 same.referencePlot()
+
+compulsive: CollapseDryPostProcess = CollapseDryPostProcess(key_word="compulsive")
+compulsive.viewPlot()
+compulsive.referencePlot()

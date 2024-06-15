@@ -6,6 +6,7 @@
     - [ ] generation of particles for arbitary shape (via `point-cloud-utils` using `PyCall`)
     - [ ] ...
 2. Boundary
+    - [x] compulsive wall force
     - [ ] periodic boundary in each dimension
     - [ ] wall boundary
     - [ ] buffer particle zone boundary
@@ -17,15 +18,22 @@
     - [ ] rigid body dynamics
     - [ ] thermal transfer model
     - [ ] ...
-4. Example
-    - [ ] collapse dry
+4. Trick
+    - [x] kernel average density filter
+    - [ ] XSPH
+    - [ ] ...
+5. Example
+    - [ ] poisson equation
+        - [x] 1D
+        - [ ] 2D
+    - [x] collapse dry
     - [ ] lid-driven cavity
     - [ ] poiseuille flow
     - [ ] flow over cylinder
     - [ ] natural convection cavity
     - [ ] natural convection circular
     - [ ] ...
-5. Others
+6. Others
     - [ ] `DEM` method
     - [ ] documentation github pages
     - [ ] neural network acceleration
