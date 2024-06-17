@@ -25,7 +25,7 @@
 5. Example
     - [ ] poisson equation
         - [x] 1D
-        - [ ] 2D
+        - [x] 2D
     - [x] collapse dry
     - [ ] lid-driven cavity
     - [ ] poiseuille flow

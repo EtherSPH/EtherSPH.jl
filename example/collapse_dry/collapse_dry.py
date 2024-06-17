@@ -9,7 +9,6 @@ import os
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-import matplotlib as mpl
 import pyvista as pv
 pv.set_jupyter_backend("static")
 pv.start_xvfb()
@@ -174,7 +173,6 @@ class CollapseDryPostProcess:
         plt.legend()
         plt.grid(True)
         plt.savefig("image/collapse_dry_" + self.key_word + ".png", bbox_inches="tight", dpi=300)
-        plt.show()
         pass
     
     pass
