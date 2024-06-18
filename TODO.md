@@ -27,7 +27,7 @@
         - [x] 1D
         - [x] 2D
     - [x] collapse dry
-    - [ ] lid-driven cavity
+    - [x] lid-driven cavity
     - [ ] poiseuille flow
     - [ ] flow over cylinder
     - [ ] natural convection cavity

@@ -54,7 +54,7 @@ class CollapseDryPostProcess:
         pass
     
     def viewPlot(self, scalars: str = "Velocity", point_size: str = 5) -> None:
-        plotter: pv.Plotter = pv.Plotter()
+        plotter: pv.Plotter = pv.Plotter(off_screen=True)
         poly_data: pv.PolyData = self.readStep(self.view_step)
         plotter.add_mesh(poly_data, scalars=scalars, cmap="jet", point_size=point_size)
         t, step = self.getTime(poly_data), self.getStep(poly_data)
