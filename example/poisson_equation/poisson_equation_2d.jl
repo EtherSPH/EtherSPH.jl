@@ -7,6 +7,7 @@
 
 using EtherSPH
 using SparseArrays
+using PyCall
 
 abstract type DemoFunction{Dimension} end
 
@@ -198,3 +199,7 @@ vtp_writer.output_path_ = "example/results/poisson_equation/poisson_equation_2d"
 
 assurePathExist(vtp_writer)
 saveVTP(vtp_writer, system, 0, 0.0)
+
+function post()
+    PyCall.@pyinclude "example/poisson_equation/poisson_equation_2d.py"
+end

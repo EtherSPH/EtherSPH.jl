@@ -13,10 +13,10 @@
     - [ ] ...
 3. Model
     - [ ] linear elastic equation model
-    - [ ] arbitray constitutive relation (via `Einsum.jl` fpor tensor operation)
+    - [ ] arbitray constitutive relation (via `Einsum.jl` for tensor operation)
     - [ ] fsi (fluid-solid interaction)
     - [ ] rigid body dynamics
-    - [ ] thermal transfer model
+    - [x] thermal transfer model
     - [ ] ...
 4. Trick
     - [x] kernel average density filter
@@ -30,11 +30,12 @@
     - [x] lid-driven cavity
     - [ ] poiseuille flow
     - [ ] flow over cylinder
-    - [ ] natural convection cavity
+    - [x] natural convection cavity
     - [ ] natural convection circular
     - [ ] ...
 6. Others
     - [ ] `DEM` method
     - [ ] documentation github pages
     - [ ] neural network acceleration
+    - [ ] SPH interpolation to grid
     - [ ] ...

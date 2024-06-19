@@ -7,6 +7,7 @@
 
 using EtherSPH
 using ProgressBars
+using PyCall
 
 const reynolds_number = 100.0
 
@@ -45,7 +46,7 @@ const FLUID_TAG = 1
 const WALL_TAG = 2
 
 @inline function getPressureFromDensity(rho::Float64)::Float64
-    return c*c * (rho - rho_0) + p_0
+    return c * c * (rho - rho_0) + p_0
 end
 
 @kwdef mutable struct Particle <: AbstractParticle2D
@@ -67,7 +68,6 @@ end
     # used for compulsive boundary
     normal_vec_::Vector2D = Vector2D(0.0, 0.0)
 end
-
 
 @inline function continuity!(p::Particle, q::Particle, rpq::RealVector{dim}, r::Float64)::Nothing where {dim}
     if p.type_ == FLUID_TAG && q.type_ == FLUID_TAG
@@ -251,5 +251,14 @@ function main()::Nothing
         end
         t += dt
     end
+    return nothing
+end
+
+function post()::Nothing
+    PyCall.@pyinclude "example/lid_driven_cavity/lid_driven_cavity.py"
+    LidDrivenCavityPostProcess = py"LidDrivenCavityPostProcess"
+    post_process = LidDrivenCavityPostProcess(reynolds_number = Int(reynolds_number), reference_gap = gap)
+    post_process.viewPlot()
+    post_process.referencePlot()
     return nothing
 end

@@ -1,0 +1,8 @@
+# python is required to run plot script
+# although do all things in julia is cool
+# python's pyvista is still the best for processing vtk files
+# also, xvfb is required to run the script in remote server
+numpy >= 1.26
+pandas >= 2.2.2
+matplotlib >= 3.9.4
+pyvista >= 0.43.8

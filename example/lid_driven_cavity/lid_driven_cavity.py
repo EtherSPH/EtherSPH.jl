@@ -13,23 +13,30 @@ import pyvista as pv
 pv.set_jupyter_backend("static")
 pv.start_xvfb()
 
+POST_NAME: str = "lid_driven_cavity"
+
 class LidDrivenCavityPostProcess:
     
     FLUID_TAG: int = 1
     WALL_TAG: int = 2
     lid_length: float = 1.0
-    reference_middle_u: pd.DataFrame = pd.read_csv("data/middle_u.csv")
-    reference_middle_v: pd.DataFrame = pd.read_csv("data/middle_v.csv")
     
-    def __init__(self, reference_gap: float = 0.01, key_word: str = "compulsive", reynolds_number: int = 100) -> None:
+    def __init__(self, working_directory: str = f"example/{POST_NAME}", reference_gap: float = 0.01, key_word: str = "compulsive", reynolds_number: int = 100) -> None:
+        self.working_directory: str = working_directory
         self.reference_gap: float = reference_gap
         self.h: float = 3 * reference_gap
         self.key_word: str = key_word
         self.reynolds_number: int = reynolds_number
-        self.data_path: str = "../results/lid_driven_cavity/lid_driven_cavity_re_%d_%s" % (reynolds_number, key_word)
+        self.data_path: str = os.path.join(working_directory, f"../results/{POST_NAME}/{POST_NAME}_re_{reynolds_number}_{key_word}")
         self.readData()
         self.makeMiddleU()
         self.makeMiddleV()
+        self.readReference()
+        pass
+    
+    def readReference(self) -> None:
+        self.reference_middle_u: pd.DataFrame = pd.read_csv(os.path.join(self.working_directory, "data/middle_u.csv"))
+        self.reference_middle_v: pd.DataFrame = pd.read_csv(os.path.join(self.working_directory, "data/middle_v.csv"))
         pass
     
     def readData(self) -> None:
@@ -67,7 +74,7 @@ class LidDrivenCavityPostProcess:
         t, step = self.getTime(poly_data), self.getStep(poly_data)
         plotter.add_text(f"Time: {t:.4f} s  Step: {step}", font_size=15, position="upper_edge")
         plotter.camera_position = "xy"
-        plotter.screenshot(f"image/lid_driven_cavity_re_{self.reynolds_number}_" + self.key_word + "_cmap.png")
+        plotter.screenshot(os.path.join(self.working_directory, f"image/{POST_NAME}_re_{self.reynolds_number}_" + self.key_word + "_cmap.png"))
         pass
     
     def getPosition(self, poly_data: pv.PolyData) -> tuple[np.ndarray, np.ndarray]:
@@ -139,15 +146,7 @@ class LidDrivenCavityPostProcess:
         ax2.set_title("Middle Velocity $V$ Re=%d" % self.reynolds_number)
         ax2.set_xlabel("$x$")
         ax2.set_ylabel("$v$")
-        plt.savefig("image/lid_driven_cavity_re_%d_" % self.reynolds_number + self.key_word + "_reference.png", bbox_inches="tight", dpi=300)
+        plt.savefig(os.path.join(self.working_directory, f"image/{POST_NAME}_re_%d_" % self.reynolds_number + self.key_word + "_reference.png"), bbox_inches="tight", dpi=300)
         pass
     
     pass
-
-re100_compulsive: LidDrivenCavityPostProcess = LidDrivenCavityPostProcess(reynolds_number=100, reference_gap=0.01)
-re100_compulsive.viewPlot()
-re100_compulsive.referencePlot()
-
-re400_compulsive: LidDrivenCavityPostProcess = LidDrivenCavityPostProcess(reynolds_number=400, reference_gap=0.01)
-re400_compulsive.viewPlot()
-re400_compulsive.referencePlot()

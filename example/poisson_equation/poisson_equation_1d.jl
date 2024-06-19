@@ -9,6 +9,7 @@ using EtherSPH
 using SparseArrays
 using CSV
 using DataFrames
+using PyCall
 
 abstract type DemoFunction{Dimension} end
 
@@ -116,3 +117,7 @@ assurePathExist(save_path)
 
 df = DataFrame(x = problem.x_, u = problem.u_, u_theory = problem.u_theory_)
 CSV.write(joinpath(save_path, save_filename), df)
+
+function post()
+    PyCall.@pyinclude "example/poisson_equation/poisson_equation_1d.py"
+end

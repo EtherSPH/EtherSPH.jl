@@ -13,3 +13,12 @@
     p.drho_ = 0.0
     return nothing
 end
+
+@inline function libUpdateTemperature!(
+    p::ParticleType;
+    dt::Float64 = 0.0,
+)::Nothing where {Dimension, ParticleType <: AbstractParticle{Dimension}}
+    p.t_ += dt * p.dt_
+    p.dt_ = 0.0
+    return nothing
+end

@@ -1,11 +1,11 @@
 #=
   @ author: bcynuaa <bcynuaa@163.com> | callm1101 <Calm.Liu@outlook.com> | vox-1 <xur2006@163.com>
-  @ date: 2024/06/14 18:07:32
+  @ date: 2024/06/18 18:03:48
   @ license: MIT
   @ description:
  =#
 
-@inline function libTraditionalViscosityForce!(
+@inline function libTraditionalThermalConduction!(
     p::ParticleType,
     q::ParticleType,
     rpq::RealVector{Dimension},
@@ -13,8 +13,8 @@
     kernel_gradient::Float64 = 0.0,
     h::Float64 = 0.0,
 )::Nothing where {Dimension, ParticleType <: AbstractParticle{Dimension}}
-    mu_pq = harmonicMean(p.mu_, q.mu_)
-    p.dv_vec_ .+=
-        2 * mu_pq * q.mass_ * r * kernel_gradient / (p.rho_ * q.rho_ * (r * r + 0.01 * h * h)) * (p.v_vec_ .- q.v_vec_)
+    kappa_pq = harmonicMean(p.kappa_, q.kappa_)
+    heat = 2 * kappa_pq * r * kernel_gradient * (p.t_ - q.t_) / (p.rho_ * q.rho_ * (r * r + 0.01 * h * h))
+    p.dt_ += q.mass_ * heat / p.cp_
     return nothing
 end

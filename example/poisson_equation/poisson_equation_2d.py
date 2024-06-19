@@ -5,13 +5,16 @@
  # @ description:
  '''
 
+import os
 import numpy as np
 import matplotlib.pyplot as plt
 import pyvista as pv
 pv.set_jupyter_backend("static")
 pv.start_xvfb()
 
-file: str = "../results/poisson_equation/poisson_equation_2d/poisson_equation_2d0.vtp"
+working_directory: str = "example/poisson_equation/"
+
+file: str = os.path.join(working_directory, "../results/poisson_equation/poisson_equation_2d/poisson_equation_2d0.vtp")
 poly_data: pv.PolyData = pv.read(file)
 
 x: np.ndarray = np.array(poly_data.points[:, 0])
@@ -35,4 +38,4 @@ cbar2.set_ticks(np.linspace(0, 15, 7))
 ax2.set_title("Analytical Solution")
 ax2.set_xlabel("$x$")
 ax2.set_ylabel("$y$")
-plt.savefig("image/poisson_equation_2d.png", bbox_inches="tight", dpi=300)
+plt.savefig(os.path.join("example/poisson_equation/", "image/poisson_equation_2d.png"), bbox_inches="tight", dpi=300)

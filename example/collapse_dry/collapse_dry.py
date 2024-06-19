@@ -13,6 +13,8 @@ import pyvista as pv
 pv.set_jupyter_backend("static")
 pv.start_xvfb()
 
+POST_NAME: str = "collapse_dry"
+
 class CollapseDryPostProcess:
     
     FLUID_TAG: int = 1
@@ -20,18 +22,23 @@ class CollapseDryPostProcess:
     water_width: float = 1.0
     water_height: float = 2.0
     gravity: float = 9.81
-    koshizuka_and_oka_1996_width: pd.DataFrame = pd.read_csv("data/koshizuka_and_oka_1996_width.csv")
-    koshizuka_and_oka_1996_height: pd.DataFrame = pd.read_csv("data/koshizuka_and_oka_1996_height.csv")
-    violeau_and_issa_2007_width: pd.DataFrame = pd.read_csv("data/violeau_and_issa_2007_width.csv")
-    violeau_and_issa_2007_height: pd.DataFrame = pd.read_csv("data/violeau_and_issa_2007_height.csv")
     view_step: int = 200
     
-    def __init__(self, referece_gap: float = 0.02, key_word: str = "same") -> None:
+    def __init__(self, working_directory: str = f"example/{POST_NAME}", referece_gap: float = 0.02, key_word: str = "same") -> None:
+        self.working_directory: str = working_directory
         self.referece_gap: float = referece_gap
         self.h: float = 3 * self.referece_gap
         self.key_word: str = key_word
-        self.data_path: str = "../results/collapse_dry/collapse_dry_" + self.key_word
+        self.data_path: str = os.path.join(working_directory, f"../results/{POST_NAME}/{POST_NAME}_" + self.key_word)
         self.readData()
+        self.readReference()
+        pass
+    
+    def readReference(self) -> None:
+        self.koshizuka_and_oka_1996_width: pd.DataFrame = pd.read_csv(os.path.join(self.working_directory, "data/koshizuka_and_oka_1996_width.csv"))
+        self.koshizuka_and_oka_1996_height: pd.DataFrame = pd.read_csv(os.path.join(self.working_directory, "data/koshizuka_and_oka_1996_height.csv"))
+        self.violeau_and_issa_2007_width: pd.DataFrame = pd.read_csv(os.path.join(self.working_directory, "data/violeau_and_issa_2007_width.csv"))
+        self.violeau_and_issa_2007_height: pd.DataFrame = pd.read_csv(os.path.join(self.working_directory, "data/violeau_and_issa_2007_height.csv"))
         pass
     
     def readData(self) -> None:
@@ -60,7 +67,7 @@ class CollapseDryPostProcess:
         t, step = self.getTime(poly_data), self.getStep(poly_data)
         plotter.add_text(f"Time: {t:.4f} s  Step: {step}", font_size=15, position="upper_edge")
         plotter.camera_position = "xy"
-        plotter.screenshot("image/collapse_dry_" + self.key_word + "_cmap.png")
+        plotter.screenshot(os.path.join(self.working_directory, f"image/{POST_NAME}_" + self.key_word + "_cmap.png"))
         pass
     
     def getTime(self, poly_data: pv.PolyData) -> float:
@@ -172,7 +179,7 @@ class CollapseDryPostProcess:
         plt.ylabel("H/H0")
         plt.legend()
         plt.grid(True)
-        plt.savefig("image/collapse_dry_" + self.key_word + ".png", bbox_inches="tight", dpi=300)
+        plt.savefig(os.path.join(self.working_directory, f"image/{POST_NAME}_" + self.key_word + "_reference.png"), bbox_inches="tight", dpi=300)
         pass
     
     pass

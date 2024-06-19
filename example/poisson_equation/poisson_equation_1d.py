@@ -5,11 +5,14 @@
  # @ description:
  '''
 
+import os
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 
-df_1d: pd.DataFrame = pd.read_csv("../results/poisson_equation/poisson_equation_1d/poisson_equation_1d.csv")
+working_directory: str = "example/poisson_equation/"
+
+df_1d: pd.DataFrame = pd.read_csv(os.path.join(working_directory, "../results/poisson_equation/poisson_equation_1d/poisson_equation_1d.csv"))
 
 plt.figure(figsize=(6, 4), facecolor="white")
 plt.plot(df_1d["x"], df_1d["u"], label="SPH Numerical Solution", color="blue")
@@ -19,4 +22,4 @@ plt.ylabel("u")
 plt.legend()
 plt.grid(True)
 plt.title("1D Poisson Equation $3x^2+10x+2$")
-plt.savefig("image/poisson_equation_1d.png", bbox_inches="tight", dpi=300)
+plt.savefig(os.path.join("example/poisson_equation/", "image/poisson_equation_1d.png"), bbox_inches="tight", dpi=300)

@@ -19,7 +19,7 @@ It's also included in [SmoothedParticles.jl](https://github.com/OndrejKincl/Smoo
 This method treats wall particles as fixed water particles. They have continuity & momentum interaction with normal fluid particles.
 
 <center>
-<image src="image/collapse_dry_same.png" width=70%>
+<image src="image/collapse_dry_same_reference.png" width=70%>
 </br>
 <b>fig. collapse onto a dry bottom - treat wall as the same</b>
 </center>
@@ -41,7 +41,7 @@ This method treats wall particles as fixed water particles. They have continuity
 This method is from [SPH MODELING OF TSUNAMI WAVES, Rogers & Dalrymple - 2008](http://www.worldscientific.com/doi/abs/10.1142/9789812790910_0003). A compulsive force is applied on fluid particles by wall particles.
 
 <center>
-<image src="image/collapse_dry_compulsive.png" width=70%>
+<image src="image/collapse_dry_compulsive_reference.png" width=70%>
 </br>
 <b>fig. collapse onto a dry bottom - compulsive wall</b>
 </center>

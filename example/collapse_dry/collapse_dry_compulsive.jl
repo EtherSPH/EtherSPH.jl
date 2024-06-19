@@ -8,6 +8,7 @@
 using EtherSPH
 using Parameters
 using ProgressBars
+using PyCall
 
 const dim = 2
 const dr = 0.02
@@ -243,5 +244,14 @@ function main()::Nothing
         end
         t += dt
     end
+    return nothing
+end
+
+function post()::Nothing
+    PyCall.@pyinclude "example/collapse_dry/collapse_dry.py"
+    CollapseDryPostProcess = py"CollapseDryPostProcess"
+    post_process = CollapseDryPostProcess(key_word = "compulsive")
+    post_process.viewPlot()
+    post_process.referencePlot()
     return nothing
 end
