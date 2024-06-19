@@ -34,7 +34,7 @@ const mass = rho_0 * dr^dim
 const c = 3.5
 const nu_0 = prandtl_number / sqrt(rayleigh_number)
 const mu_0 = nu_0 * rho_0
-const p_0 = 0.01 * rho_0 * c^2
+const p_0 = 0.02 * rho_0 * c^2
 const alpha = nu_0 / prandtl_number
 
 const gravity = 1.0
@@ -51,7 +51,7 @@ const beta = rayleigh_number * nu_0 * alpha / gravity / delta_t / cavity_length^
 const dt = 0.1 * h / c
 const t_end = 50.0
 const output_dt = 100 * dt
-const density_filter_dt = 10 * dt
+const density_filter_dt = 30 * dt
 
 const FLUID_TAG = 1
 const WALL_TAG = 2 # adiabatic wall
@@ -94,7 +94,7 @@ end
 
 @inline function updateDensityAndPressure!(p::Particle)::Nothing
     if p.type_ == FLUID_TAG
-        EtherSPH.libUpdateDensity!(p; dt = dt)
+        EtherSPH.libUpdateDensity!(p; dt=dt)
         p.p_ = getPressureFromDensity(p.rho_)
         return nothing
     else
@@ -105,7 +105,7 @@ end
 
 @inline function continuity!(p::Particle, q::Particle, rpq::Vector2D, r::Float64)::Nothing
     if p.type_ == FLUID_TAG && q.type_ == FLUID_TAG
-        EtherSPH.libTraditionalContinuity!(p, q, rpq, r; kernel_gradient = DW(r))
+        EtherSPH.libTraditionalContinuity!(p, q, rpq, r; kernel_gradient=DW(r))
         return nothing
     end
     return nothing
@@ -121,12 +121,12 @@ end
             q,
             rpq,
             r;
-            kernel_value = w,
-            kernel_gradient = dw,
-            reference_kernel_value = rw,
+            kernel_value=w,
+            kernel_gradient=dw,
+            reference_kernel_value=rw,
         )
-        EtherSPH.libTraditionalViscosityForce!(p, q, rpq, r; kernel_gradient = dw, h = 0.0 * h)
-        EtherSPH.libTraditionalThermalConduction!(p, q, rpq, r; kernel_gradient = dw, h = 0.5 * h)
+        EtherSPH.libTraditionalViscosityForce!(p, q, rpq, r; kernel_gradient=dw, h=0.5 * h)
+        EtherSPH.libTraditionalThermalConduction!(p, q, rpq, r; kernel_gradient=dw, h=0.5 * h)
     elseif p.type_ == FLUID_TAG && q.type_ == WALL_TAG
         w = W(r)
         dw = DW(r)
@@ -136,12 +136,12 @@ end
             q,
             rpq,
             r;
-            kernel_value = w,
-            kernel_gradient = dw,
-            reference_kernel_value = rw,
+            kernel_value=w,
+            kernel_gradient=dw,
+            reference_kernel_value=rw,
         )
-        EtherSPH.libTraditionalViscosityForce!(p, q, rpq, r; kernel_gradient = dw, h = 0.0 * h)
-        EtherSPH.libCompulsiveForce!(p, q, rpq, r; h = 0.5 * h)
+        EtherSPH.libTraditionalViscosityForce!(p, q, rpq, r; kernel_gradient=dw, h=0.5 * h)
+        EtherSPH.libCompulsiveForce!(p, q, rpq, r; h=0.5 * h)
         return nothing
     elseif p.type_ == FLUID_TAG && q.type_ == THERMOSTATIC_WALL_TAG
         w = W(r)
@@ -152,13 +152,13 @@ end
             q,
             rpq,
             r;
-            kernel_value = w,
-            kernel_gradient = dw,
-            reference_kernel_value = rw,
+            kernel_value=w,
+            kernel_gradient=dw,
+            reference_kernel_value=rw,
         )
-        EtherSPH.libTraditionalViscosityForce!(p, q, rpq, r; kernel_gradient = dw, h = 0.0 * h)
-        EtherSPH.libTraditionalThermalConduction!(p, q, rpq, r; kernel_gradient = dw, h = 0.5 * h)
-        EtherSPH.libCompulsiveForce!(p, q, rpq, r; h = 0.5 * h)
+        EtherSPH.libTraditionalViscosityForce!(p, q, rpq, r; kernel_gradient=dw, h=0.5 * h)
+        EtherSPH.libTraditionalThermalConduction!(p, q, rpq, r; kernel_gradient=dw, h=0.5 * h)
+        EtherSPH.libCompulsiveForce!(p, q, rpq, r; h=0.5 * h)
         return nothing
     end
     return nothing
@@ -166,22 +166,22 @@ end
 
 @inline function accelerateAndMoveAndHeated!(p::Particle)::Nothing
     if p.type_ == FLUID_TAG
-        EtherSPH.libAccelerateAndMove!(p; dt = dt, body_force_vec = bodyForceVectorByBoussiensqApproximation(p.t_))
-        EtherSPH.libUpdateTemperature!(p; dt = dt)
+        EtherSPH.libAccelerateAndMove!(p; dt=dt, body_force_vec=bodyForceVectorByBoussiensqApproximation(p.t_))
+        EtherSPH.libUpdateTemperature!(p; dt=dt)
     end
     return nothing
 end
 
 @inline function densityFilterInteraction!(p::Particle, q::Particle, rpq::Vector2D, r::Float64)::Nothing
     if p.type_ == FLUID_TAG && q.type_ == FLUID_TAG
-        EtherSPH.libKernelAverageDensityFilterInteraction!(p, q, rpq, r; kernel_value = W(r))
+        EtherSPH.libKernelAverageDensityFilterInteraction!(p, q, rpq, r; kernel_value=W(r))
     end
     return nothing
 end
 
 @inline function densityFilterSelfaction!(p::Particle)::Nothing
     if p.type_ == FLUID_TAG
-        EtherSPH.libKernelAverageDensityFilterSelfaction!(p; kernel_value = kernel.kernel_value_0_)
+        EtherSPH.libKernelAverageDensityFilterSelfaction!(p; kernel_value=kernel.kernel_value_0_)
     end
     return nothing
 end
@@ -197,7 +197,7 @@ end
 
 @inline function modifyWall!(p::Particle)::Nothing
     p.mu_ *= 1000
-    p.kappa_ *= 1
+    p.kappa_ *= 0.48 # i have to admit that this is a magic number, direct harmonic mean is not good
     p.t_ = NaN
     return nothing
 end
@@ -257,11 +257,11 @@ const right_wall_column = Rectangle(
 )
 
 particles = Particle[]
-fluid_particles = createParticles(Particle, gap, fluid_column; modify! = modifyFluid!)
-bottom_wall_particles = createParticles(Particle, gap, bottom_wall_column; modify! = modifyBottomWall!)
-top_wall_particles = createParticles(Particle, gap, top_wall_column; modify! = modifyTopWall!)
-left_wall_particles = createParticles(Particle, gap, left_wall_column; modify! = modifyLeftWall!)
-right_wall_particles = createParticles(Particle, gap, right_wall_column; modify! = modifyRightWall!)
+fluid_particles = createParticles(Particle, gap, fluid_column; (modify!)=modifyFluid!)
+bottom_wall_particles = createParticles(Particle, gap, bottom_wall_column; (modify!)=modifyBottomWall!)
+top_wall_particles = createParticles(Particle, gap, top_wall_column; (modify!)=modifyTopWall!)
+left_wall_particles = createParticles(Particle, gap, left_wall_column; (modify!)=modifyLeftWall!)
+right_wall_particles = createParticles(Particle, gap, right_wall_column; (modify!)=modifyRightWall!)
 
 append!(
     particles,
@@ -312,7 +312,7 @@ end
 function post()::Nothing
     PyCall.@pyinclude "example/natural_convection_cavity/natural_convection_cavity.py"
     NaturalConvectionCavityPostProcess = py"NaturalConvectionCavityPostProcess"
-    post_process = NaturalConvectionCavityPostProcess(rayleigh_number = "1e4", reference_gap = dr)
+    post_process = NaturalConvectionCavityPostProcess(rayleigh_number="1e4", reference_gap=dr)
     post_process.viewPlot()
     post_process.referencePlot()
     nu = post_process.calculateNusseltNumber()

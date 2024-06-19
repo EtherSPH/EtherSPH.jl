@@ -94,11 +94,47 @@ And the streamlines with temperature contour lines are shown below:
 fig: temperature distribution at Rayleigh number = 1e4
 </center>
 
-# My previous work: error of Nusselt number
+## Rayleigh Number = 1e5
 
-| $Ra$ | Ref 1 | Ref 2 | Ref 3 | SPH | Error % | N | N Sample | $P_g\quad \times c_0^2 \rho_0$ |
-| - | - | - | - | - | - | - | - | - |
-| $10^3$ | 1.117 | 1.118 | 1.114 | 1.11718 | 0.016 | 100 | 88 | 0.1 |
-| $10^4$ | 2.235 | 2.243 | 2.245 | 2.35214 | 0.09 | 100 | 101 | 0.02 |
-| $10^5$ | 4.504 | 4.519 | 4.510 | 4.5075 | 0.0777 | 100 | 111 | 0.02 |
-| $10^6$ | 8.767 | 8.800 | 8.806 | 8.2798 | 5.5572 | 100 | 201 | 0.02 |
+The temperature distribution colored by temperature is shown below:
+
+<center>
+<img src="image/natural_convection_cavity_ra_1e5_compulsive_cmap.png" width="70%">
+</br>
+fig: temperature distribution at Rayleigh number = 1e5
+</center>
+
+And the streamlines with temperature contour lines are shown below:
+
+<center>
+<img src="image/natural_convection_cavity_ra_1e5_compulsive_reference.png" width="70%">
+</br>
+fig: temperature distribution at Rayleigh number = 1e5
+</center>
+
+## Rayleigh Number = 1e6
+
+The temperature distribution colored by temperature is shown below:
+
+<center>
+<img src="image/natural_convection_cavity_ra_1e6_compulsive_cmap.png" width="70%">
+</br>
+fig: temperature distribution at Rayleigh number = 1e6
+</center>
+
+And the streamlines with temperature contour lines are shown below:
+
+<center>
+<img src="image/natural_convection_cavity_ra_1e6_compulsive_reference.png" width="70%">
+</br>
+fig: temperature distribution at Rayleigh number = 1e6
+</center>
+
+# Comparison: error of Nusselt number
+
+| $Ra$ | Ref 1 | Ref 2 | Ref 3 | SPH | Error % |
+| - | - | - | - | - | - |
+| $10^3$ | 1.117 | 1.118 | 1.114 | 1.118268 | 0.02397 |
+| $10^4$ | 2.235 | 2.243 | 2.245 | 2.237477 | 0.2463 |
+| $10^5$ | 4.504 | 4.519 | 4.510 | 4.514251 | 0.0221 |
+| $10^6$ | 8.767 | 8.800 | 8.806 | 8.82599 | 0.227 |
