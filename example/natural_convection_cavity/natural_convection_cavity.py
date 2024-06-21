@@ -20,6 +20,7 @@ class NaturalConvectionCavityPostProcess:
     
     FLUID_TAG: int = 1
     WALL_TAG: int = 2
+    THERMOSTATIC_WALL_TAG: int = 3
     cavity_length: float = 1.0
     
     def __init__(self, working_directory: str = f"example/{POST_NAME}", reference_gap: float = 0.01, key_word: str = "compulsive", rayleigh_number: str = "1e3"):

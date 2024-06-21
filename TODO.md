@@ -2,6 +2,9 @@
 
 1. Shape
     - [ ] add more standard shape types to `Geometry`
+        - [x] Rectangle
+        - [x] Ring
+        - [ ] ...
     - [ ] generation of particles for standard shape
     - [ ] generation of particles for arbitary shape (via `point-cloud-utils` using `PyCall`)
     - [ ] ...
@@ -31,7 +34,7 @@
     - [ ] poiseuille flow
     - [ ] flow over cylinder
     - [x] natural convection cavity
-    - [ ] natural convection circular
+    - [x] natural convection ring
     - [ ] ...
 6. Others
     - [ ] `DEM` method

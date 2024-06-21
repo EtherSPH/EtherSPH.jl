@@ -35,3 +35,4 @@ end
 end
 
 include("Rectangle.jl")
+include("Ring.jl")
