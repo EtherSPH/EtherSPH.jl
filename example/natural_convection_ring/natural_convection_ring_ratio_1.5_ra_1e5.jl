@@ -151,7 +151,6 @@ end
     return nothing
 end
 
-
 @inline function accelerateAndMoveAndHeated!(p::Particle)::Nothing
     if p.type_ == FLUID_TAG
         EtherSPH.libAccelerateAndMove!(p; dt = dt, body_force_vec = bodyForceVectorByBoussiensqApproximation(p.t_))

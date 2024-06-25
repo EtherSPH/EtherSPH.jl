@@ -58,7 +58,7 @@ const WALL_TAG = 2 # adiabatic wall
 const THERMOSTATIC_WALL_TAG = 3
 
 @inline function getPressureFromDensity(rho::Float64)::Float64
-    return c*c*(rho - rho_0) + p_0
+    return c * c * (rho - rho_0) + p_0
 end
 
 @inline function bodyForceVectorByBoussiensqApproximation(t::Float64)::Vector2D

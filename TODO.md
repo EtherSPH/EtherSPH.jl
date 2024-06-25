@@ -15,7 +15,7 @@
     - [ ] buffer particle zone boundary
     - [ ] ...
 3. Model
-    - [ ] linear elastic equation model
+    - [x] linear elastic equation model (see hanging beam example)
     - [ ] arbitray constitutive relation (via `Einsum.jl` for tensor operation)
     - [ ] fsi (fluid-solid interaction)
     - [ ] rigid body dynamics
@@ -35,6 +35,7 @@
     - [ ] flow over cylinder
     - [x] natural convection cavity
     - [x] natural convection ring
+    - [x] hanging beam
     - [ ] ...
 6. Others
     - [ ] `DEM` method
