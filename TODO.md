@@ -11,6 +11,9 @@
 2. Boundary
     - [x] compulsive wall force
     - [ ] periodic boundary in each dimension
+        - [x] 1 dimension
+        - [ ] 2 dimension
+        - [ ] 3 dimensionb
     - [ ] wall boundary
     - [ ] buffer particle zone boundary
     - [ ] ...
@@ -26,12 +29,12 @@
     - [ ] XSPH
     - [ ] ...
 5. Example
-    - [ ] poisson equation
+    - [x] poisson equation
         - [x] 1D
         - [x] 2D
     - [x] collapse dry
     - [x] lid-driven cavity
-    - [ ] poiseuille flow
+    - [x] poiseuille flow
     - [ ] flow over cylinder
     - [x] natural convection cavity
     - [x] natural convection ring

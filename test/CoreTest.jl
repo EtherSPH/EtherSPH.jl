@@ -115,3 +115,37 @@ end
 
     @test ps[1].x_vec_ ≈ Vector2D(-0.11714285714285716, -0.19999999999999996)
 end
+
+@testset "ThreadSafeParticleCollector" begin
+    @kwdef mutable struct Particle <: AbstractParticle2D
+        x_vec_::Vector2D = Vector2D(0.0, 0.0)
+        mass_::Float64 = 1.0
+        rho_::Float64 = 1.0
+        type_::Int64 = 1
+    end
+
+    particle_system = ParticleSystem(Particle, 0.1, Vector2D(0.0, 0.0), Vector2D(1.0, 1.0))
+    thread_safe_particle_collector = ThreadSafeParticleCollector(Particle)
+
+    n_threads = Threads.nthreads()
+
+    @test length(thread_safe_particle_collector.particles_containers_) == n_threads
+
+    Threads.@threads for i in 1:99
+        particle = Particle()
+        push!(thread_safe_particle_collector, particle)
+    end
+
+    @test length(thread_safe_particle_collector) == 99
+
+    for i in 1:n_threads
+        n_upper = ceil(Int, 99 / n_threads)
+        n_lower = floor(Int, 99 / n_threads)
+        @test length(thread_safe_particle_collector.particles_containers_[i]) in [n_upper, n_lower]
+    end
+
+    append!(particle_system, thread_safe_particle_collector)
+
+    @test length(particle_system) == 99
+    @test length(thread_safe_particle_collector) == 0
+end

@@ -2,7 +2,7 @@
 
 # Hanging Beam
 
-This example is originally from [Essentially non-hourglass and non-tensile-instability SPH elastic dynamics, Zhang, Chi 2024](https://www.sciencedirect.com/science/article/abs/pii/S0307904X22003742).
+This example is originally from [Essentially non-hourglass and non-tensile-instability SPH elastic dynamics, Zhang, Chi 2024](https://www.sciencedirect.com/science/article/pii/S0021999124003218).
 
 The problem discussed in this example is a hanging beam. The beam is made of a linear elastic material with Young's modulus $E$, poisson's ratio $\nu$ and density $\rho$. The beam is hanging from a fixed point and is applied with an initial velocity. The model setup picture is shown below.
 
