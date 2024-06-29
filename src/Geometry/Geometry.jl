@@ -34,5 +34,5 @@ end
     return true
 end
 
-include("Rectangle.jl")
-include("Ring.jl")
+include("2D/2D.jl")
+include("3D/3D.jl")

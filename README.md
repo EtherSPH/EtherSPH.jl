@@ -6,6 +6,7 @@ Maybe the last version in julia, largely thanks to [SmoothedParticles.jl](https:
 
 - [poisson equation](example/poisson_equation/poisson_equation.md)
 - [collapse dry](example/collapse_dry/collapse_dry.md)
+- [cruchaga](example/cruchaga/cruchaga.md)
 - [lid-driven cavity](example/lid_driven_cavity/lid_driven_cavity.md)
 - [natural convection cavity](example/natural_convection_cavity/natural_convection_cavity.md)
 - [natural convection ring](example/natural_convection_ring/natural_convection_ring.md)

@@ -33,6 +33,7 @@
         - [x] 1D
         - [x] 2D
     - [x] collapse dry
+    - [x] cruchaga
     - [x] lid-driven cavity
     - [x] poiseuille flow
     - [ ] flow over cylinder

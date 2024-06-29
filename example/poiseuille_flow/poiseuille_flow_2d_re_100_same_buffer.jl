@@ -33,7 +33,7 @@ const pipe_length = 4 * pipe_width
 const wall_width = 3 * dr
 const reference_length = pipe_width
 # * additional buffer length
-const buffer_length =  6 * dr
+const buffer_length = 6 * dr
 const wall_length = pipe_length + 2 * buffer_length
 const l = pipe_width
 
@@ -47,10 +47,12 @@ const ax = fx / rho_0
 const g = Vector2D(ax, 0.0)
 
 @inline function getUxFromY(y::Float64; t::Float64 = 0.0)::Float64
-    ux =  fx * 0.5 / mu_0 * y * (pipe_width - y)
+    ux = fx * 0.5 / mu_0 * y * (pipe_width - y)
     for i in 0:10
-        ux -= 4 * ax * l * l / (nu_0 * (pi * (2 * i + 1))^3) *
-            sin(pi * y * (2 * i + 1) / l) * exp(-(2 * i + 1)^2 * pi*pi * nu_0 * t / (l * l))
+        ux -=
+            4 * ax * l * l / (nu_0 * (pi * (2 * i + 1))^3) *
+            sin(pi * y * (2 * i + 1) / l) *
+            exp(-(2 * i + 1)^2 * pi * pi * nu_0 * t / (l * l))
     end
     return ux
 end
@@ -147,7 +149,7 @@ end
 end
 
 @inline function densityFilterInteraction!(p::Particle, q::Particle, rpq::Vector2D, r::Float64)::Nothing
-    if p.type_ == FLUID_TAG 
+    if p.type_ == FLUID_TAG
         EtherSPH.libKernelAverageDensityFilterInteraction!(p, q, rpq, r; kernel_value = W(r))
         return nothing
     end
@@ -162,7 +164,11 @@ end
 end
 
 # ! the core main logic here
-@inline function handleInletAndOutlet!(system::ParticleSystem, thread_safe_particle_collector::ThreadSafeParticleCollector; t::Float64 = 0.0)::Nothing
+@inline function handleInletAndOutlet!(
+    system::ParticleSystem,
+    thread_safe_particle_collector::ThreadSafeParticleCollector;
+    t::Float64 = 0.0,
+)::Nothing
     Threads.@threads for i in eachindex(system)
         p = system[i]
         if p.type_ == INLET_TAG && p.x_vec_[1] >= x0
@@ -211,22 +217,15 @@ end
 end
 
 const fluid_column = Rectangle(Vector2D(x0, y0), Vector2D(x0 + pipe_length, y0 + pipe_width))
-const bottom_wall_column = Rectangle(
-    Vector2D(x0 - buffer_length, y0 - wall_width),
-    Vector2D(x0 + pipe_length + buffer_length, y0),
-)
+const bottom_wall_column =
+    Rectangle(Vector2D(x0 - buffer_length, y0 - wall_width), Vector2D(x0 + pipe_length + buffer_length, y0))
 const top_wall_column = Rectangle(
     Vector2D(x0 - buffer_length, y0 + pipe_width),
     Vector2D(x0 + pipe_length + buffer_length, y0 + pipe_width + wall_width),
 )
-const inlet_buffer_column = Rectangle(
-    Vector2D(x0 - buffer_length, y0),
-    Vector2D(x0, y0 + pipe_width),
-)
-const outlet_buffer_column = Rectangle(
-    Vector2D(x0 + pipe_length, y0),
-    Vector2D(x0 + pipe_length + buffer_length, y0 + pipe_width),
-)
+const inlet_buffer_column = Rectangle(Vector2D(x0 - buffer_length, y0), Vector2D(x0, y0 + pipe_width))
+const outlet_buffer_column =
+    Rectangle(Vector2D(x0 + pipe_length, y0), Vector2D(x0 + pipe_length + buffer_length, y0 + pipe_width))
 
 particles = Particle[]
 fluid_particles = createParticles(Particle, gap, fluid_column; modify! = modifyFluid!)
@@ -235,7 +234,10 @@ top_wall_particles = createParticles(Particle, gap, top_wall_column; modify! = m
 inlet_buffer_particles = createParticles(Particle, gap, inlet_buffer_column; modify! = modifyInlet!)
 outlet_buffer_particles = createParticles(Particle, gap, outlet_buffer_column; modify! = modifyOutlet!)
 
-append!(particles, vcat(fluid_particles, bottom_wall_particles, top_wall_particles, inlet_buffer_particles, outlet_buffer_particles))
+append!(
+    particles,
+    vcat(fluid_particles, bottom_wall_particles, top_wall_particles, inlet_buffer_particles, outlet_buffer_particles),
+)
 
 const lower = Vector2D(x0 - buffer_length, y0 - wall_width)
 const upper = Vector2D(x0 + pipe_length + buffer_length, y0 + pipe_width + wall_width)
