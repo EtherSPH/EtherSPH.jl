@@ -25,18 +25,18 @@ The evaluation of the 2D case is shown in the following figures.
 
 <center>
 <img src="image/cruchaga_2d_step_0_cmap.png" width=40%>
-<img src="image/cruchaga_2d_step_5_cmap.png" width=40%>
-</br>
 <img src="image/cruchaga_2d_step_1_cmap.png" width=40%>
-<img src="image/cruchaga_2d_step_6_cmap.png" width=40%>
 </br>
 <img src="image/cruchaga_2d_step_2_cmap.png" width=40%>
-<img src="image/cruchaga_2d_step_7_cmap.png" width=40%>
-</br>
 <img src="image/cruchaga_2d_step_3_cmap.png" width=40%>
-<img src="image/cruchaga_2d_step_8_cmap.png" width=40%>
 </br>
 <img src="image/cruchaga_2d_step_4_cmap.png" width=40%>
+<img src="image/cruchaga_2d_step_5_cmap.png" width=40%>
+</br>
+<img src="image/cruchaga_2d_step_6_cmap.png" width=40%>
+<img src="image/cruchaga_2d_step_7_cmap.png" width=40%>
+</br>
+<img src="image/cruchaga_2d_step_8_cmap.png" width=40%>
 <img src="image/cruchaga_2d_step_9_cmap.png" width=40%>
 </br>
 fig. Cruchaga 2D result colormap
@@ -58,18 +58,18 @@ The evaluation of the 2D case is shown in the following figures.
 
 <center>
 <img src="image/cruchaga_3d_step_0_cmap.png" width=40%>
-<img src="image/cruchaga_3d_step_5_cmap.png" width=40%>
-</br>
 <img src="image/cruchaga_3d_step_1_cmap.png" width=40%>
-<img src="image/cruchaga_3d_step_6_cmap.png" width=40%>
 </br>
 <img src="image/cruchaga_3d_step_2_cmap.png" width=40%>
-<img src="image/cruchaga_3d_step_7_cmap.png" width=40%>
-</br>
 <img src="image/cruchaga_3d_step_3_cmap.png" width=40%>
-<img src="image/cruchaga_3d_step_8_cmap.png" width=40%>
 </br>
 <img src="image/cruchaga_3d_step_4_cmap.png" width=40%>
+<img src="image/cruchaga_3d_step_5_cmap.png" width=40%>
+</br>
+<img src="image/cruchaga_3d_step_6_cmap.png" width=40%>
+<img src="image/cruchaga_3d_step_7_cmap.png" width=40%>
+</br>
+<img src="image/cruchaga_3d_step_8_cmap.png" width=40%>
 <img src="image/cruchaga_3d_step_9_cmap.png" width=40%>
 </br>
 fig. Cruchaga 3D result colormap
