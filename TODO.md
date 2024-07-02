@@ -36,7 +36,7 @@
     - [x] cruchaga
     - [x] lid-driven cavity
     - [x] poiseuille flow
-    - [ ] flow over cylinder
+    - [x] flow over cylinder
     - [x] natural convection cavity
     - [x] natural convection ring
     - [x] hanging beam
