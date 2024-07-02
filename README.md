@@ -11,7 +11,7 @@ Maybe the last version in julia, largely thanks to [SmoothedParticles.jl](https:
     1. [collapse dry](example/collapse_dry/collapse_dry.md)
     2. [cruchaga](example/cruchaga/cruchaga.md)
     3. ...
-3. claasical fluid benchmark
+3. classical fluid dynamics problems
     1. [lid-driven cavity](example/lid_driven_cavity/lid_driven_cavity.md)
     2. [poiseuille flow](example/poiseuille_flow/poiseuille_flow.md)
     3. [cylinder](example/cylinder/cylinder.md)
