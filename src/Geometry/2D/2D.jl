@@ -7,3 +7,4 @@
 
 include("Rectangle.jl")
 include("Ring.jl")
+include("Circle.jl")

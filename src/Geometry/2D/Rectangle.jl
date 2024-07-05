@@ -10,7 +10,7 @@ struct Rectangle <: Shape
     upper_::Point2D
 end
 
-@inline dimension(::Rectangle)::Float64 = Dimension2
+@inline dimension(::Rectangle)::Int64 = Dimension2
 
 @inline function isInsideShape(point::Point2D, rectangle::Rectangle)::Bool
     for i in 1:Dimension2

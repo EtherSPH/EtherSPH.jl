@@ -36,7 +36,7 @@ This method treats wall particles as fixed water particles. They have continuity
 
 > note 3: a few water particles will hang on the wall. -- 2024.06.15
 
-## Compilsive: a compulsive force prevents fluid particles from penetrating
+## Compulsive: a compulsive force prevents fluid particles from penetrating
 
 This method is from [SPH MODELING OF TSUNAMI WAVES, Rogers & Dalrymple - 2008](http://www.worldscientific.com/doi/abs/10.1142/9789812790910_0003). A compulsive force is applied on fluid particles by wall particles.
 

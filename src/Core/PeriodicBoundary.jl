@@ -66,3 +66,39 @@ end
     setPeriodicBoundaryAlongX!(particle_system.cell_link_list_)
     return nothing
 end
+
+@inline function setPeriodicBoundaryAlongX!(cell_link_list::CellLinkList3D)::Nothing
+    nx, ny, nz = size(cell_link_list.cells_)
+    displacement = Vector3D(0.0, 0.0, 0.0)
+    displacement[1] = cell_link_list.calculation_domain_box_.range_[1]
+    Threads.@threads for index in 1:(ny * nz)
+        j = div(index - 1, nz) + 1
+        k = mod(index - 1, nz) + 1
+        for delta_j in -1:1, delta_k in -1:1
+            j_ = j + delta_j
+            k_ = k + delta_k
+            if j_ < 1 || j_ > ny || k_ < 1 || k_ > nz
+                continue
+            else
+                addNeighbour!(
+                    cell_link_list.cells_[1, j, k],
+                    CartesianIndex3D(nx, j_, k_);
+                    relative_position_displacement = displacement,
+                )
+                addNeighbour!(
+                    cell_link_list.cells_[nx, j, k],
+                    CartesianIndex3D(1, j_, k_);
+                    relative_position_displacement = -displacement,
+                )
+            end
+        end
+    end
+    return nothing
+end
+
+@inline function setPeriodicBoundaryAlongX!(
+    particle_system::ParticleSystem3D{ParticleType},
+)::Nothing where {ParticleType <: AbstractParticle3D}
+    setPeriodicBoundaryAlongX!(particle_system.cell_link_list_)
+    return nothing
+end

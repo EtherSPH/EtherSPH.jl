@@ -7,10 +7,13 @@
 
 module EtherSPH
 
+const Dimension1 = 1
 const Dimension2 = 2
 const Dimension3 = 3
 
 using StaticArrays
+import LinearAlgebra # LinearAlgebra import, instead of using.
+using Einsum
 using Parameters
 using Dates
 using WriteVTK

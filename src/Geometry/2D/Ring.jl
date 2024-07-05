@@ -11,7 +11,7 @@ struct Ring <: Shape
     outer_radius_::Float64
 end
 
-@inline dimension(::Ring)::Float64 = Dimension2
+@inline dimension(::Ring)::Int64 = Dimension2
 
 @inline function isInsideShape(point::Point2D, ring::Ring)::Bool
     r = norm(point .- ring.center_)

@@ -35,6 +35,20 @@
     @test cross(VectorX(3), VectorY(3)) ≈ VectorZ(3)
 end
 
+@testset "Matrix" begin
+    A = @MArray [1.0 2.0; 3.0 4.0]
+    B = @MArray [5.0 6.0; 7.0 8.0]
+    @test A + B ≈ Matrix2D([6.0 8.0; 10.0 12.0])
+
+    @test A * B ≈ Matrix2D([19.0 22.0; 43.0 50.0])
+    @test A * 2.0 ≈ Matrix2D([2.0 4.0; 6.0 8.0])
+
+    @test dot(A, B) ≈ 70.0
+
+    @einsum C[i, j] := A[i, k] * B[k, j]
+    @test C ≈ A * B
+end
+
 @testset "IndexContainer" begin
     idc = IndexContainer()
     for i in 1:10

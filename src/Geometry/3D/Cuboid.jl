@@ -10,7 +10,7 @@ struct Cuboid <: Shape
     upper_::Point3D
 end
 
-@inline dimension(::Cuboid)::Float64 = Dimension3
+@inline dimension(::Cuboid)::Int64 = Dimension3
 
 @inline function isInsideShape(point::Point3D, cuboid::Cuboid)::Bool
     for i in 1:Dimension3

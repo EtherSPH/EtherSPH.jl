@@ -23,7 +23,7 @@ class PoiseuilleFlow2DPostProcess:
     def __init__(
         self,
         working_directory: str = f"example/{POST_NAME}",
-        reference_gap: float = 0.01,
+        reference_gap: float = 0.01 / 20,
         key_word: str = "2d_re_100_same_periodic",
         reynolds_number: float = 100,
         pipe_width: float = 0.01,

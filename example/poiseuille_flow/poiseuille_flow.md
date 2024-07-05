@@ -162,6 +162,40 @@ And the comparison of the velocity profile at $x = 0.5L$:
 fig. Poiseuille flow with Re=100, same boundary particles, buffer-zone boundary condition
 </center>
 
+## 3D Re=100 periodoc
+
+<center>
+<img src="image/poiseuille_flow_3d_re_100_same_periodic_cmap.png" width=70%>
+</br>
+fig. Poiseuille flow with Re=100, same boundary particles, buffer-zone boundary condition
+</center>
+
+The stable governing equation here should be:
+
+$$
+\begin{aligned}
+    -a_z=\frac{\mathrm{d}p}{\mathrm{d}z}=\mu \frac{1}{r}\frac{\mathrm{d}}{\mathrm{d}r}\left(
+        r\frac{\mathrm{d}w}{\mathrm{d}r}
+    \right)
+\end{aligned}
+$$
+
+The solution will be:
+
+$$
+\begin{aligned}
+    w(r) = \frac{a_z}{4\mu}(R^2 - r^2)
+\end{aligned}
+$$
+
+with:
+
+$$
+\begin{aligned}
+    w_{\max} = \frac{a_z}{4\mu}R^2\quad w_{\text{mean}} = \frac{1}{2}w_{\max}
+\end{aligned}
+$$
+
 # Notes
 
 1. The buffer-zone boundary condition is more complicated than the periodic boundary condition. Buffer-zone boundary will force the user be more careful when handling the boundary condition. It's not easy to use.

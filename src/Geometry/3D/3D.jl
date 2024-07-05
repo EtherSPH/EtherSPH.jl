@@ -6,3 +6,5 @@
  =#
 
 include("Cuboid.jl")
+include("RingColumn.jl")
+include("Cylinder.jl")
