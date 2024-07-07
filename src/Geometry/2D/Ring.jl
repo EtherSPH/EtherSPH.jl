@@ -26,6 +26,7 @@ end
     reference_gap::Float64,
     ring::Ring;
     modify!::Function = p -> nothing,
+    parallel::Bool = false
 )::Vector{ParticleType}
     n_r = round(Int, (ring.outer_radius_ - ring.inner_radius_) / reference_gap)
     gap_r = (ring.outer_radius_ - ring.inner_radius_) / n_r

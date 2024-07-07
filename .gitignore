@@ -6,4 +6,7 @@ example/results/*
 
 # ignore files
 *.ipynb
+*.pyc
 *.vtp
+*.vtu
+*.vtk

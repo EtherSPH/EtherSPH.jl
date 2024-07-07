@@ -38,9 +38,10 @@ end
     reference_gap::Float64,
     cylinder::CylinderX;
     modify!::Function = p -> nothing,
+    parallel::Bool = true,
 )::Vector{ParticleType}
     ring_column_x = RingColumn{1}(cylinder.center_, reference_gap * 0.5, cylinder.radius_, cylinder.height_)
-    particles = createParticles(ParticleType, reference_gap, ring_column_x; modify! = modify!)
+    particles = createParticles(ParticleType, reference_gap, ring_column_x; modify! = modify!, parallel = parallel)
     n_axis = round(Int, cylinder.height_ / reference_gap)
     gap_axis = cylinder.height_ / n_axis
     for i in 1:n_axis
