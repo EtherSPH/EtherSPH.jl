@@ -27,3 +27,13 @@ end
 # * ========== basic vector operations ========== * #
 
 @inline dot(A::Matrix2D, B::Matrix2D)::Float64 = LinearAlgebra.dot(A, B)
+
+@inline dot(A::Matrix3D, B::Matrix3D)::Float64 = LinearAlgebra.dot(A, B)
+
+@inline function trace(A::Matrix2D)::Float64
+    @inbounds return A[1] + A[4]
+end
+
+@inline function trace(A::Matrix3D)::Float64
+    @inbounds return A[1] + A[5] + A[9]
+end
