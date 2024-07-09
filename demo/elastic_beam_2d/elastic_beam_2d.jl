@@ -129,10 +129,14 @@ end
         @inbounds @simd for alpha in 1:dim
             @simd for beta in 1:dim
                 p.dv_vec_[alpha] +=
-                    q.mass_ * (
-                        rho_p_2_inv * p.sigma_mat_[alpha, beta] + rho_q_2_inv * q.sigma_mat_[alpha, beta] - 
+                    q.mass_ *
+                    (
+                        rho_p_2_inv * p.sigma_mat_[alpha, beta] + rho_q_2_inv * q.sigma_mat_[alpha, beta] -
                         artificial_stress * dirac(alpha, beta)
-                    ) * dw * rpq[beta] * r_inv
+                    ) *
+                    dw *
+                    rpq[beta] *
+                    r_inv
             end
         end
     end
