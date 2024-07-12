@@ -173,27 +173,33 @@ fig. Poiseuille flow with Re=100, same boundary particles, buffer-zone boundary 
 The stable governing equation here should be:
 
 $$
+\begin{equation}
 \begin{aligned}
     -a_z=\frac{\mathrm{d}p}{\mathrm{d}z}=\mu \frac{1}{r}\frac{\mathrm{d}}{\mathrm{d}r}\left(
         r\frac{\mathrm{d}w}{\mathrm{d}r}
     \right)
 \end{aligned}
+\end{equation}
 $$
 
 The solution will be:
 
 $$
+\begin{equation}
 \begin{aligned}
     w(r) = \frac{a_z}{4\mu}(R^2 - r^2)
 \end{aligned}
+\end{equation}
 $$
 
 with:
 
 $$
+\begin{equation}
 \begin{aligned}
     w_{\max} = \frac{a_z}{4\mu}R^2\quad w_{\text{mean}} = \frac{1}{2}w_{\max}
 \end{aligned}
+\end{equation}
 $$
 
 # Notes

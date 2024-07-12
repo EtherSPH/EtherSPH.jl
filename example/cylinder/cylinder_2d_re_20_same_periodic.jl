@@ -83,7 +83,7 @@ const CYLINDER_TAG = 3
     mu_::Float64 = mu_0
     gap_::Float64 = gap
     sum_kernel_weight_::Float64 = 0.0
-    sum_kernel_weighted_value_::Float64 = 0.0
+    sum_kernel_weighted_rho_::Float64 = 0.0
 end
 
 @inline function continuity!(p::Particle, q::Particle, rpq::Vector2D, r::Float64)::Nothing

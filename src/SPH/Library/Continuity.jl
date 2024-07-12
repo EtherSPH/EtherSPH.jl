@@ -15,3 +15,14 @@
     p.drho_ += q.mass_ * dot(p.v_vec_ .- q.v_vec_, rpq) / r * kernel_gradient
     return nothing
 end
+
+@inline function libBalancedContinuity!(
+    p::ParticleType,
+    q::ParticleType,
+    rpq::RealVector{Dimension},
+    r::Float64;
+    kernel_gradient::Float64 = 0.0,
+)::Nothing where {Dimension, ParticleType <: AbstractParticle{Dimension}}
+    p.drho_ += p.rho_ * q.mass_ * dot(p.v_vec_ .- q.v_vec_, rpq) / (r * q.rho_) * kernel_gradient
+    return nothing
+end

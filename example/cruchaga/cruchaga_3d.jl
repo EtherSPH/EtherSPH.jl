@@ -72,7 +72,7 @@ const density_filter_dt = 20 * dt
     mu_::Float64 = mu
     gap_::Float64 = dr
     sum_kernel_weight_::Float64 = 0.0
-    sum_kernel_weighted_value_::Float64 = 0.0
+    sum_kernel_weighted_rho_::Float64 = 0.0
     # * wall normal vector
     normal_vec_::Vector3D = Vector3D(0.0, 0.0, 0.0)
 end

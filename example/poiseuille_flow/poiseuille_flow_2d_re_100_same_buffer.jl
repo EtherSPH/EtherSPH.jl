@@ -92,7 +92,7 @@ const OUTLET_TAG = 4
     mu_::Float64 = mu_0
     gap_::Float64 = gap
     sum_kernel_weight_::Float64 = 0.0
-    sum_kernel_weighted_value_::Float64 = 0.0
+    sum_kernel_weighted_rho_::Float64 = 0.0
 end
 
 @inline function setTheoreticalVelocity!(p::Particle; t::Float64 = 0.0)::Nothing

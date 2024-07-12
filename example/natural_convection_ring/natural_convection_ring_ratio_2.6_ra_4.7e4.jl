@@ -84,7 +84,7 @@ end
     mu_::Float64 = mu_0
     gap_::Float64 = gap
     sum_kernel_weight_::Float64 = 0.0
-    sum_kernel_weighted_value_::Float64 = 0.0
+    sum_kernel_weighted_rho_::Float64 = 0.0
     # * second group, wall properties
     normal_vec_::Vector2D = Vector2D(0.0, 0.0)
     # * third group, temperature field properties

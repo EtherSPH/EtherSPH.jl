@@ -55,3 +55,55 @@ This method is from [SPH MODELING OF TSUNAMI WAVES, Rogers & Dalrymple - 2008](h
 > note 1: WendlandC2 kernel performs better stability than CubicSpline. -- 2024.06.15
 
 > note 2: Still there will be a 'blank gap'. A thin layer of water particles close to wall boundary performs the pressure force on the other water particles, introducing a 'blank layer' between wall and fluid. -- 2024.06.15
+
+## Pressure Extrapolation: extrapolate pressure from fluid particles to wall particles
+
+The basic idea of pressure extrapolation is to calculate the pressure of wall particles by extrapolating the pressure of fluid particles:
+
+$$
+\begin{equation}
+    \begin{aligned}
+    p_w=\sum_f \frac{\frac{m_f}{\rho_f}W_{pf}(p_f+\rho_f\vec{g}\cdot\vec{r}_{wf})}{\frac{m_f}{\rho_f}W_{pf}}
+    \end{aligned}
+\end{equation}
+$$
+
+However, when negative pressure or wall particles locating upon fluid particles, equation above contributes negative pressure on wall pressure, causing abnormal absorption of fluid particles. A cutoff is added to prevent negative pressure:
+
+$$
+\begin{equation}
+    \begin{aligned}
+        p_f^* = \max(p_f,0.0)
+        \quad
+        \rho_f\vec{g}\cdot\vec{r}_{wf}^* = \max(\rho_f\vec{g}\cdot\vec{r}_{wf},0.0)
+    \end{aligned}
+\end{equation}
+$$
+
+At the same time, a balanced continuity and pressure force form should be applied:
+
+$$
+\begin{equation}
+    \begin{aligned}
+        \left(\frac{\mathrm{d}\rho}{\mathrm{d}t}\right)_i &= 
+        \sum_j\rho_i\frac{m_j}{\rho_j}\vec{v}_{ij}\cdot \nabla W_{ij}\\
+        \vec{f}_{i}^p &=
+        \sum_j -m_j \frac{p_i+p_j}{\rho_i \rho_j}\nabla W_{ij}
+    \end{aligned}
+\end{equation}
+$$
+
+<center>
+<image src="image/collapse_dry_extrapolation_reference.png" width=70%>
+</br>
+<b>fig. collapse onto a dry bottom - pressure extrapolation</b>
+</center>
+
+<center>
+<image src="image/collapse_dry_extrapolation_cmap.png" width=70%>
+</br>
+<b>fig. collapse onto a dry bottom - pressure extrapolation</b>
+</center>
+
+> *what's good?*: No blank gap between wall and fluid particles. Fit for all kind of wall material (any value of density is allowed). No need to generate normal vector.
+> *what's bad?*: a little bit unstable than the other 2 methods mentioned above. -- 2024.07.11 

@@ -64,7 +64,7 @@ end
     mu_::Float64 = mu
     gap_::Float64 = dr
     sum_kernel_weight_::Float64 = 0.0
-    sum_kernel_weighted_value_::Float64 = 0.0
+    sum_kernel_weighted_rho_::Float64 = 0.0
     # * wall normal vector
     normal_vec_::Vector2D = Vector2D(0.0, 0.0)
 end

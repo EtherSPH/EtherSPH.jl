@@ -59,7 +59,7 @@ const WALL_TAG = 2
     mu_::Float64 = mu
     gap_::Float64 = dr
     sum_kernel_weight_::Float64 = 0.0
-    sum_kernel_weighted_value_::Float64 = 0.0
+    sum_kernel_weighted_rho_::Float64 = 0.0
 end
 
 # for better written code, real 'fortran'
@@ -103,7 +103,7 @@ end
 @inline function densityFilter!(p::Particle, q::Particle, rpq::Vector2D, r::Float64)::Nothing
     if p.type_ == FLUID_TAG && q.type_ == FLUID_TAG
         p.sum_kernel_weight_ += W(r) * m(q) / rho(q)
-        p.sum_kernel_weighted_value_ += W(r) * m(q)
+        p.sum_kernel_weighted_rho_ += W(r) * m(q)
     end
     return nothing
 end
@@ -111,10 +111,10 @@ end
 @inline function densityFilter!(p::Particle)::Nothing
     if p.type_ == FLUID_TAG
         p.sum_kernel_weight_ += kernel.kernel_value_0_ * m(p) / rho(p)
-        p.sum_kernel_weighted_value_ += kernel.kernel_value_0_ * m(p)
-        p.rho_ = p.sum_kernel_weighted_value_ / p.sum_kernel_weight_
+        p.sum_kernel_weighted_rho_ += kernel.kernel_value_0_ * m(p)
+        p.rho_ = p.sum_kernel_weighted_rho_ / p.sum_kernel_weight_
         p.sum_kernel_weight_ = 0.0
-        p.sum_kernel_weighted_value_ = 0.0
+        p.sum_kernel_weighted_rho_ = 0.0
     end
     return nothing
 end

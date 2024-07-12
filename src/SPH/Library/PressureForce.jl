@@ -19,3 +19,19 @@
     p.dv_vec_ .+= -q.mass_ * p_rho_2 * kernel_gradient / r * rpq
     return nothing
 end
+
+@inline function libBalancedPressureForce!(
+    p::ParticleType,
+    q::ParticleType,
+    rpq::RealVector{Dimension},
+    r::Float64;
+    kernel_gradient::Float64 = 0.0,
+    kernel_value::Float64 = 0.0,
+    reference_kernel_value::Float64 = 1.0,
+)::Nothing where {Dimension, ParticleType <: AbstractParticle{Dimension}}
+    pressure_force = p.p_ + q.p_
+    pressure_force += abs(pressure_force) * kernel_value / reference_kernel_value * 0.01
+    pressure_force /= p.rho_ * q.rho_
+    p.dv_vec_ .+= -q.mass_ * pressure_force * kernel_gradient / r * rpq
+    return nothing
+end

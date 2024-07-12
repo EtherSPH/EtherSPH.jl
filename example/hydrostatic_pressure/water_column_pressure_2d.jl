@@ -1,6 +1,6 @@
 #=
   @ author: bcynuaa <bcynuaa@163.com> | callm1101 <Calm.Liu@outlook.com> | vox-1 <xur2006@163.com>
-  @ date: 2024/07/04 20:09:21
+  @ date: 2024/07/10 21:26:20
   @ license: MIT
   @ description:
  =#
@@ -9,14 +9,16 @@ using EtherSPH
 using ProgressBars
 using PyCall
 
-const x0 = 0.0
-const y0 = 0.0
-const z0 = 0.0
+const dim = 2
 
-const dim = 3
-const dr = 1e-2 / 20
+const water_width = 2.0
+const water_height = 1.0
+const box_width = 2.0
+const box_height = 2.0
+const dr = water_height / 40
 const gap = dr
-const h = 2 * dr
+const h = 3 * dr
+const wall_width = h
 
 const kernel = WendlandC2{dim}(h)
 
@@ -28,57 +30,49 @@ end
     return kernelGradient(r, kernel)
 end
 
-const reynolds_number = 100
-const pipe_diameter = 1e-2
-const pipe_radius = pipe_diameter / 2
-const pipe_length = 3 * pipe_diameter
-const wall_width = 2 * dr
-const reference_length = pipe_diameter
-
 const rho_0 = 1e3
 const mass = rho_0 * dr^dim
 const mu_0 = 1e-3
-const u_mean = reynolds_number * mu_0 / (rho_0 * pipe_diameter)
-const u_max = 2 * u_mean
-const fx = 4 * mu_0 * u_max / (pipe_radius^2)
-const ax = fx / rho_0
-const g = Vector3D(ax, 0.0, 0.0)
-const c_0 = 10 * u_max
-const p_0 = rho_0 * c_0^2 * 0.01
-@info "u max: $u_max, c_0: $c_0"
-
-@inline function getPressureFromDensity(rho::Float64)::Float64
-    return p_0 + c_0 * c_0 * (rho - rho_0)
-end
-
-const dt = 0.1 * h / c_0
-const total_time = 50.0
-const output_dt = 200 * dt
-const density_filter_dt = 20 * dt
-@info "total step: $(round(Int, total_time / dt))"
+const gravity = 10.0
+const g = Vector2D(0.0, -gravity)
+const u_max = sqrt(2 * gravity * water_height)
+const c_0 = 15 * u_max
+const p_0 = 0.0
 
 const FLUID_TAG = 1
 const WALL_TAG = 2
 
-@kwdef mutable struct Particle <: AbstractParticle3D
+const dt = 0.1 * h / c_0
+const total_time = 5.0
+const output_dt = 100 * dt
+const density_filter_dt = 5 * dt
+const total_steps = round(Int, total_time / dt)
+@info "total steps: $(total_steps)"
+
+@inline function getPressureFromDensity(rho::Float64)::Float64
+    return c_0 * c_0 * (rho - rho_0)
+end
+
+@kwdef mutable struct Particle <: AbstractParticle2D
     # must have
-    x_vec_::Vector3D = Vector3D(0.0, 0.0, 0.0)
+    x_vec_::Vector2D = Vector2D(0.0, 0.0)
     rho_::Float64 = rho_0
     mass_::Float64 = mass
-    type_::Int64 = FLUID_TAG
-    # additonal properties
-    p_::Float64 = p_0
+    type_::Int = FLUID_TAG
+    # additional
+    v_vec_::Vector2D = Vector2D(0.0, 0.0)
+    dv_vec_::Vector2D = Vector2D(0.0, 0.0)
     drho_::Float64 = 0.0
-    v_vec_::Vector3D = Vector3D(0.0, 0.0, 0.0)
-    dv_vec_::Vector3D = Vector3D(0.0, 0.0, 0.0)
+    p_::Float64 = p_0
     c_::Float64 = c_0
     mu_::Float64 = mu_0
     gap_::Float64 = gap
+    # kernel density filter
     sum_kernel_weight_::Float64 = 0.0
     sum_kernel_weighted_rho_::Float64 = 0.0
 end
 
-@inline function continuity!(p::Particle, q::Particle, rpq::Vector3D, r::Float64)::Nothing
+@inline function continuity!(p::Particle, q::Particle, rpq::Vector2D, r::Float64)::Nothing
     if p.type_ == WALL_TAG && q.type_ == WALL_TAG
         return nothing
     end
@@ -92,7 +86,7 @@ end
     return nothing
 end
 
-@inline function momentum!(p::Particle, q::Particle, rpq::Vector3D, r::Float64)::Nothing
+@inline function momentum!(p::Particle, q::Particle, rpq::Vector2D, r::Float64)::Nothing
     if p.type_ == FLUID_TAG
         w = W(r)
         dw = DW(r)
@@ -106,7 +100,7 @@ end
             kernel_value = w,
             reference_kernel_value = rw,
         )
-        EtherSPH.libTraditionalViscosityForce!(p, q, rpq, r; kernel_gradient = dw, h = h / 2)
+        EtherSPH.libTraditionalViscosityForce!(p, q, rpq, r; kernel_gradient = dw, h = 0.5 * h)
     end
     return nothing
 end
@@ -114,17 +108,11 @@ end
 @inline function accelerateAndMove!(p::Particle)::Nothing
     if p.type_ == FLUID_TAG
         EtherSPH.libAccelerateAndMove!(p; dt = dt, body_force_vec = g)
-        # ! periodic boundary condition here !
-        if p.x_vec_[1] > x0 + pipe_length
-            p.x_vec_[1] -= pipe_length
-        elseif p.x_vec_[1] < x0
-            p.x_vec_[1] += pipe_length
-        end
     end
     return nothing
 end
 
-@inline function densityFilterInteraction!(p::Particle, q::Particle, rpq::Vector3D, r::Float64)::Nothing
+@inline function densityFilterInteraction!(p::Particle, q::Particle, rpq::Vector2D, r::Float64)::Nothing
     if p.type_ == FLUID_TAG && q.type_ == FLUID_TAG
         EtherSPH.libKernelAverageDensityFilterInteraction!(p, q, rpq, r; kernel_value = W(r))
     end
@@ -138,62 +126,68 @@ end
     return nothing
 end
 
+const x0 = 0.0
+const y0 = 0.0
+
 @inline function modifyFluid!(p::Particle)::Nothing
     p.type_ = FLUID_TAG
+    depth = water_height - (p.x_vec_.y - y0)
+    p.p_ = rho_0 * gravity * depth
+    p.rho_ = p.p_ / c_0 / c_0 + rho_0
     return nothing
 end
 
 @inline function modifyWall!(p::Particle)::Nothing
     p.type_ = WALL_TAG
-    p.mu_ *= 1
-    return nothing
-end
-
-@inline function modify!(p::Particle)::Nothing
-    r = sqrt((p.x_vec_[2] - y0)^2 + (p.x_vec_[3] - z0)^2)
-    if r < pipe_radius
-        modifyFluid!(p)
-    else
-        modifyWall!(p)
+    depth = water_height - (p.x_vec_.y - y0)
+    if depth > 0.0
+        p.p_ = rho_0 * gravity * depth
+        p.rho_ = p.p_ / c_0 / c_0 + rho_0
     end
     return nothing
 end
 
-const cylinder = CylinderX(Point3D(x0, y0, z0), pipe_radius + wall_width, pipe_length)
+const fluid_column = Rectangle(Vector2D(x0, y0), Vector2D(x0 + water_width, y0 + water_height))
+const bottom_wall_column =
+    Rectangle(Vector2D(x0 - wall_width, y0 - wall_width), Vector2D(x0 + box_width + wall_width, y0))
+const left_wall_column = Rectangle(Vector2D(x0 - wall_width, y0), Vector2D(x0, y0 + box_height))
+const right_wall_column =
+    Rectangle(Vector2D(x0 + box_width, y0), Vector2D(x0 + box_width + wall_width, y0 + box_height))
 
-particles = createParticles(Particle, gap, cylinder; modify! = modify!)
+particles = Particle[]
+fluid_particles = createParticles(Particle, gap, fluid_column; modify! = modifyFluid!)
+bottom_wall_particles = createParticles(Particle, gap, bottom_wall_column; modify! = modifyWall!)
+left_wall_particles = createParticles(Particle, gap, left_wall_column; modify! = modifyWall!)
+right_wall_particles = createParticles(Particle, gap, right_wall_column; modify! = modifyWall!)
 
-const lower = Vector3D(x0, y0 - pipe_radius - wall_width, z0 - pipe_radius - wall_width)
-const upper = Vector3D(x0 + pipe_length, y0 + pipe_radius + wall_width, z0 + pipe_radius + wall_width)
+append!(particles, vcat(fluid_particles, bottom_wall_particles, left_wall_particles, right_wall_particles))
+
+const lower = Vector2D(x0 - wall_width, y0 - wall_width)
+const upper = Vector2D(x0 + box_width + wall_width, y0 + box_height + wall_width)
 system = ParticleSystem(Particle, h, lower, upper)
-append!(system.particles_, particles)
-
-@info "total particles: $(length(system.particles_))"
-
-# ! set the periodic boundary along x direction
-setPeriodicBoundaryAlongX!(system)
+append!(system, particles)
 
 vtp_writer = VTPWriter()
-@inline getPressure(p::Particle)::Float64 = p.p_
-@inline function getVelocity(p::Particle)::Vector3D
+@inline function getPressure(p::Particle)::Float64
     if p.type_ == FLUID_TAG
-        return p.v_vec_
+        return p.p_
     else
-        return Vector3D(NaN, NaN, NaN)
+        return NaN
     end
 end
+@inline getVelocity(p::Particle)::Vector2D = p.v_vec_
 addScalar!(vtp_writer, "Pressure", getPressure)
 addVector!(vtp_writer, "Velocity", getVelocity)
 vtp_writer.step_digit_ = 4
-vtp_writer.file_name_ = "poiseuille_flow_3d_re_100_same_periodic_"
-vtp_writer.output_path_ = "example/results/poiseuille_flow/poiseuille_flow_3d_re_100_same_periodic"
+vtp_writer.file_name_ = "water_column_pressure_2d_"
+vtp_writer.output_path_ = "example/results/hydrostatic_pressure/water_column_pressure_2d"
 
 function main()::Nothing
     t = 0.0
     assurePathExist(vtp_writer)
     saveVTP(vtp_writer, system, 0, t)
     createCellLinkList!(system)
-    for step in ProgressBar(1:round(Int, total_time / dt))
+    for step in ProgressBar(1:total_steps)
         applyInteraction!(system, continuity!)
         applySelfaction!(system, updateDensityAndPressure!)
         applyInteraction!(system, momentum!)
@@ -212,9 +206,9 @@ function main()::Nothing
 end
 
 function post()::Nothing
-    PyCall.@pyinclude "example/poiseuille_flow/poiseuille_flow_3d.py"
-    PoiseuilleFlow3DPostProcess = py"PoiseuilleFlow3DPostProcess"
-    post_process = PoiseuilleFlow3DPostProcess(reference_gap = gap)
+    PyCall.@pyinclude "example/hydrostatic_pressure/water_column_pressure_2d.py"
+    WaterColumnPressurePostProcess = py"WaterColumnPressurePostProcess"
+    post_process = WaterColumnPressurePostProcess()
     post_process.viewPlot()
     return nothing
 end

@@ -62,6 +62,10 @@ end
     return x / norm(x)
 end
 
+@inline function cross(x::Vector2D, y::Vector2D)::Float64
+    return x[1] * y[2] - x[2] * y[1]
+end
+
 @inline function cross(x::Vector3D, y::Vector3D)::Vector3D
     return Vector3D(x[2] * y[3] - x[3] * y[2], x[3] * y[1] - x[1] * y[3], x[1] * y[2] - x[2] * y[1])
 end

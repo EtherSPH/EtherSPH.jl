@@ -8,7 +8,6 @@
 using Test
 using EtherSPH
 using StaticArrays
-using Einsum
 using Parameters
 
 @testset "EtherSPH" begin

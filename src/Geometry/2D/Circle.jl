@@ -21,7 +21,7 @@ end
     reference_gap::Float64,
     circle::Circle;
     modify!::Function = p -> nothing,
-    parallel::Bool = false,
+    parallel::Bool = true,
 )::Vector{ParticleType}
     ring = Ring(circle.center_, reference_gap * 0.5, circle.radius_)
     particles = createParticles(ParticleType, reference_gap, ring; modify! = modify!, parallel = parallel)

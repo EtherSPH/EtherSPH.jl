@@ -13,7 +13,7 @@
     kernel_value::Float64 = 0.0,
 )::Nothing where {Dimension, ParticleType <: AbstractParticle{Dimension}}
     p.sum_kernel_weight_ += kernel_value * q.mass_ / q.rho_
-    p.sum_kernel_weighted_value_ += kernel_value * q.mass_
+    p.sum_kernel_weighted_rho_ += kernel_value * q.mass_
     return nothing
 end
 
@@ -22,9 +22,9 @@ end
     kernel_value::Float64,
 )::Nothing where {Dimension, ParticleType <: AbstractParticle{Dimension}}
     p.sum_kernel_weight_ += kernel_value * p.mass_ / p.rho_
-    p.sum_kernel_weighted_value_ += kernel_value * p.mass_
-    p.rho_ = p.sum_kernel_weighted_value_ / p.sum_kernel_weight_
+    p.sum_kernel_weighted_rho_ += kernel_value * p.mass_
+    p.rho_ = p.sum_kernel_weighted_rho_ / p.sum_kernel_weight_
     p.sum_kernel_weight_ = 0.0
-    p.sum_kernel_weighted_value_ = 0.0
+    p.sum_kernel_weighted_rho_ = 0.0
     return nothing
 end

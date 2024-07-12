@@ -45,8 +45,15 @@ end
 
     @test dot(A, B) ≈ 70.0
 
-    @einsum C[i, j] := A[i, k] * B[k, j]
+    C = Matrix0(2)
+    for i in 1:2, j in 1:2
+        for k in 1:2
+            C[i, j] += A[i, k] * B[k, j]
+        end
+    end
     @test C ≈ A * B
+
+    @test trace(A) ≈ 5.0
 end
 
 @testset "IndexContainer" begin

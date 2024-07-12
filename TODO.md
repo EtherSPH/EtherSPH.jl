@@ -19,7 +19,7 @@
     - [ ] ...
 3. Model
     - [x] linear elastic equation model (see hanging beam example)
-    - [ ] arbitray constitutive relation (via `Einsum.jl` for tensor operation)
+    - [ ] arbitray constitutive relation (abort `Einsum.jl` for gc issues)
     - [ ] fsi (fluid-solid interaction)
     - [ ] rigid body dynamics
     - [x] thermal transfer model
@@ -32,6 +32,7 @@
     - [x] poisson equation
         - [x] 1D
         - [x] 2D
+    - [x] hydrostatic pressure
     - [x] collapse dry
     - [x] cruchaga
     - [x] lid-driven cavity
