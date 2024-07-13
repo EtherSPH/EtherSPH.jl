@@ -4,6 +4,9 @@
     - [ ] add more standard shape types to `Geometry`
         - [x] Rectangle
         - [x] Ring
+        - [x] Circle
+        - [x] RingColumn
+        - [x] Cylinder
         - [ ] ...
     - [ ] generation of particles for standard shape
     - [ ] generation of particles for arbitary shape (via `point-cloud-utils` using `PyCall`)
@@ -19,9 +22,14 @@
     - [ ] ...
 3. Model
     - [x] linear elastic equation model (see hanging beam example)
-    - [ ] arbitray constitutive relation (abort `Einsum.jl` for gc issues)
+    - [ ] arbitray constitutive relation
     - [ ] fsi (fluid-solid interaction)
+        - [x] fluid-rigid body interaction
+        - [ ] fluid-elastic body interaction
+        - [ ] ...
     - [ ] rigid body dynamics
+        - [x] 2D rigid body dynamics
+        - [ ] 3D rigid body dynamics
     - [x] thermal transfer model
     - [ ] ...
 4. Trick
@@ -41,6 +49,7 @@
     - [x] natural convection cavity
     - [x] natural convection ring
     - [x] hanging beam
+    - [x] floating object
     - [ ] ...
 6. Others
     - [ ] `DEM` method
