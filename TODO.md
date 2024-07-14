@@ -56,4 +56,5 @@
     - [ ] documentation github pages
     - [ ] neural network acceleration
     - [ ] SPH interpolation to grid
+    - [ ] particle id reordering
     - [ ] ...

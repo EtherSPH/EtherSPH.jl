@@ -36,26 +36,35 @@ end
     return vector
 end
 
+const Vector02D = Vector0(2)
+const VectorX2D = VectorX(2)
+const VectorY2D = VectorY(2)
+
+const Vector03D = Vector0(3)
+const VectorX3D = VectorX(3)
+const VectorY3D = VectorY(3)
+const VectorZ3D = VectorZ(3)
+
 # * ========== basic vector operations ========== * #
 
 @inline function dot(x::Vector2D, y::Vector2D)::Float64
-    return x[1] * y[1] + x[2] * y[2]
+    @inbounds return x[1] * y[1] + x[2] * y[2]
 end
 
 @inline function dot(x::Vector3D, y::Vector3D)::Float64
-    return x[1] * y[1] + x[2] * y[2] + x[3] * y[3]
+    @inbounds return x[1] * y[1] + x[2] * y[2] + x[3] * y[3]
 end
 
 @inline function minusplus(x::Vector2D, y::Vector2D, z::Vector2D)::Vector2D
-    return Vector2D(x[1] - y[1] + z[1], x[2] - y[2] + z[2])
+    @inbounds return Vector2D(x[1] - y[1] + z[1], x[2] - y[2] + z[2])
 end
 
 @inline function minusplus(x::Vector3D, y::Vector3D, z::Vector3D)::Vector3D
-    return Vector3D(x[1] - y[1] + z[1], x[2] - y[2] + z[2], x[3] - y[3] + z[3])
+    @inbounds return Vector3D(x[1] - y[1] + z[1], x[2] - y[2] + z[2], x[3] - y[3] + z[3])
 end
 
 @inline function norm(x::RealVector{Dimension})::Float64 where {Dimension}
-    return sqrt(dot(x, x))
+    @inbounds return sqrt(dot(x, x))
 end
 
 @inline function normalize(x::RealVector{Dimension})::RealVector{Dimension} where {Dimension}
@@ -63,9 +72,9 @@ end
 end
 
 @inline function cross(x::Vector2D, y::Vector2D)::Float64
-    return x[1] * y[2] - x[2] * y[1]
+    @inbounds return x[1] * y[2] - x[2] * y[1]
 end
 
 @inline function cross(x::Vector3D, y::Vector3D)::Vector3D
-    return Vector3D(x[2] * y[3] - x[3] * y[2], x[3] * y[1] - x[1] * y[3], x[1] * y[2] - x[2] * y[1])
+    @inbounds return Vector3D(x[2] * y[3] - x[3] * y[2], x[3] * y[1] - x[1] * y[3], x[1] * y[2] - x[2] * y[1])
 end

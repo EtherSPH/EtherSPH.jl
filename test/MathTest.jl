@@ -54,50 +54,27 @@ end
     @test C ≈ A * B
 
     @test trace(A) ≈ 5.0
+    @test det(A) ≈ -2.0
+
+    D = @MArray [1.0 2.0 3.0; 4.0 5.0 6.0; 7.0 8.0 9.0]
+    E = @MArray [9.0 8.0 7.0; 6.0 5.0 4.0; 3.0 2.0 1.0]
+    @test D + E ≈ Matrix3D([10.0 10.0 10.0; 10.0 10.0 10.0; 10.0 10.0 10.0])
+
+    @test D * E ≈ Matrix3D([30.0 24.0 18.0; 84.0 69.0 54.0; 138.0 114.0 90.0])
+    @test D * 2 ≈ Matrix3D([2.0 4.0 6.0; 8.0 10.0 12.0; 14.0 16.0 18.0])
+
+    @test dot(D, E) ≈ 165.0
+
+    @test trace(D) ≈ 15.0
+    @test det(D) ≈ 0.0
 end
 
-@testset "IndexContainer" begin
-    idc = IndexContainer()
-    for i in 1:10
-        push!(idc, i)
-    end
-    @test length(idc) == 10
-    @test idc[1] == 1
-    @test idc[10] == 10
-    @test idc[5] == 5
-    reset!(idc)
-    @test length(idc) == 0
-end
+@testset "TinyLinearAlgebra" begin
+    x = @MArray [1.0, 2.0]
+    y = @MArray [3.0, 4.0]
+    @test dyad(x, y) ≈ x * y'
 
-@testset "CartesianIndex" begin
-    @test CartesianIndex2D(3, 4) == CartesianIndex(3, 4)
-    @test CartesianIndex3D(3, 4, 5) == CartesianIndex(3, 4, 5)
-
-    cr2d = CartesianRange(CartesianIndex(3, 4))
-    @test isInsideCartesianRange(CartesianIndex(2, 2), cr2d) == true
-
-    cr3d = CartesianRange(CartesianIndex(3, 4, 5))
-    @test isInsideCartesianRange(CartesianIndex(2, 3, 4), cr3d) == true
-end
-
-@testset "CartesianGridIndex" begin
-    end_2d = CartesianIndex2D(3, 4)
-    cri = CartesianRange(end_2d)
-    @test begin
-        passed = true
-        for i in 1:3, j in 1:4
-            passed = passed && isInsideCartesianRange(CartesianIndex2D(i, j), cri)
-        end
-        passed
-    end
-
-    end_3d = CartesianIndex3D(3, 4, 5)
-    cri = CartesianRange(end_3d)
-    @test begin
-        passed = true
-        for i in 1:3, j in 1:4, k in 1:5
-            passed = passed && isInsideCartesianRange(CartesianIndex3D(i, j, k), cri)
-        end
-        passed
-    end
+    a = @MArray [1.0, 2.0, 3.0]
+    b = @MArray [4.0, 5.0, 6.0]
+    @test dyad(a, b) ≈ a * b'
 end

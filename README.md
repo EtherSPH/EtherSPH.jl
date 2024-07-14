@@ -2,6 +2,23 @@
 
 Maybe the last version in julia, largely thanks to [SmoothedParticles.jl](https://github.com/OndrejKincl/SmoothedParticles.jl).
 
+# Setup
+
+In julia repl, type:
+
+```julia
+julia> ']' # enter package mode
+pkg> activate .
+pkg> instantiate # or resolve maybe needed
+pkg> test
+```
+
+Also, to plot results and do post-processing, a python environment with packages in [requirements.txt](requirements.txt) is needed. Either `pip` or `conda` can be used to install the packages:
+
+```bash
+pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple # use tsinghua mirror if needed
+```
+
 # Examples
 
 1. classical pde problems

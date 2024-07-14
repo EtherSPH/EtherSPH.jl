@@ -24,6 +24,12 @@ end
     return matrix
 end
 
+const Matrix02D = Matrix0(2)
+const MatrixI2D = MatrixI(2)
+
+const Matrix03D = Matrix0(3)
+const MatrixI3D = MatrixI(3)
+
 # * ========== basic vector operations ========== * #
 
 @inline dot(A::Matrix2D, B::Matrix2D)::Float64 = LinearAlgebra.dot(A, B)
@@ -36,4 +42,13 @@ end
 
 @inline function trace(A::Matrix3D)::Float64
     @inbounds return A[1] + A[5] + A[9]
+end
+
+@inline function det(A::Matrix2D)::Float64
+    @inbounds return A[1] * A[4] - A[2] * A[3]
+end
+
+@inline function det(A::Matrix3D)::Float64
+    @inbounds return A[1] * (A[5] * A[9] - A[6] * A[8]) - A[2] * (A[4] * A[9] - A[6] * A[7]) +
+                     A[3] * (A[4] * A[8] - A[5] * A[7])
 end

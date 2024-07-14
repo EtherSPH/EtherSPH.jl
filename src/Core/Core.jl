@@ -8,6 +8,7 @@
 include("Cell.jl")
 include("CellLinkList.jl")
 include("ParticleSystem.jl")
+include("NeighbourSearch.jl")
 include("Apply.jl")
 include("PeriodicBoundary.jl")
 include("ThreadSafeParticleCollector.jl")

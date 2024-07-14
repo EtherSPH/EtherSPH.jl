@@ -9,10 +9,14 @@ using Test
 using EtherSPH
 using StaticArrays
 using Parameters
+import LinearAlgebra
 
 @testset "EtherSPH" begin
     @testset "Math" begin
         include("MathTest.jl")
+    end
+    @testset "Container" begin
+        include("ContainerTest.jl")
     end
     @testset "Geometry" begin
         include("GeometryTest.jl")

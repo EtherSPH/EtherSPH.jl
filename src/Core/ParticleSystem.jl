@@ -117,37 +117,3 @@ end
     cell_link_list = CellLinkList(reference_gap, lower, upper)
     return ParticleSystem(ParticleType, cell_link_list)
 end
-
-@inline function createCellLinkList!(
-    particle_system::ParticleSystem{Dimension, ParticleType},
-)::Nothing where {Dimension, ParticleType <: AbstractParticle{Dimension}}
-    # * 1. clear all the cell's contained particles id
-    Threads.@threads for cell in particle_system.cell_link_list_.cells_
-        reset!(cell)
-    end
-    # * 2. reset to_be_removed_cell_
-    reset!(particle_system.cell_link_list_.to_be_removed_cell_)
-    # * 3. add particles to to_be_removed_cell_
-    Threads.@threads for i in eachindex(particle_system)
-        @inbounds if !isInsideCellLinkListStrictCalculationDomain(
-            particle_system[i].x_vec_,
-            particle_system.cell_link_list_,
-        )
-            push!(particle_system.cell_link_list_.to_be_removed_cell_, i)
-        end
-    end
-    length_of_to_be_removed_particles = length(particle_system.cell_link_list_.to_be_removed_cell_)
-    if length_of_to_be_removed_particles > 0
-        @inbounds to_be_removed_particle_index_list =
-            particle_system.cell_link_list_.to_be_removed_cell_.contained_particle_index_list_[1:length_of_to_be_removed_particles]
-        sort!(to_be_removed_particle_index_list)
-        deleteat!(particle_system, to_be_removed_particle_index_list)
-    end
-    # * 4. add particles to cells
-    Threads.@threads for i in eachindex(particle_system)
-        @inbounds cartesian_index =
-            getPositionCartesianIndexFromCellLinkList(particle_system[i].x_vec_, particle_system.cell_link_list_)
-        @inbounds push!(particle_system.cell_link_list_.cells_[cartesian_index], i)
-    end
-    return nothing
-end
