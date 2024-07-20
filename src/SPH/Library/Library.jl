@@ -14,7 +14,7 @@
     return nothing
 end
 
-@inline function someInteraction!(p::ParticleType, q::ParticleType, rpq::RealVector; parameters...)::Nothing
+@inline function someInteraction!(p::ParticleType, q::ParticleType, rpq::RealVector{Dimension}, r::Float64; parameters...)::Nothing
     # do something to p and q
     return nothing
 end
@@ -33,3 +33,4 @@ include("UpdateState.jl")
 include("DensityFilter.jl")
 include("BoundaryForce.jl")
 include("ThermalConduction.jl")
+include("Correction.jl")

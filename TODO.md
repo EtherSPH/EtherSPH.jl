@@ -22,6 +22,7 @@
     - [ ] ...
 3. Model
     - [x] linear elastic equation model (see hanging beam example)
+    - [x] large deformation constitutive relation (see `SPH/Cart/LargeDeformationContinuumMechanics.jl`)
     - [ ] arbitray constitutive relation
     - [ ] fsi (fluid-solid interaction)
         - [x] fluid-rigid body interaction

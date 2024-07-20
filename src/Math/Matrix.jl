@@ -30,11 +30,29 @@ const MatrixI2D = MatrixI(2)
 const Matrix03D = Matrix0(3)
 const MatrixI3D = MatrixI(3)
 
-# * ========== basic vector operations ========== * #
+struct ConstMat0{Dimension} end
+@inline function ConstMat0{Dimension2}()::Matrix2D
+    return Matrix02D
+end
+@inline function ConstMat0{Dimension3}()::Matrix3D
+    return Matrix03D
+end
 
-@inline dot(A::Matrix2D, B::Matrix2D)::Float64 = LinearAlgebra.dot(A, B)
+struct ConstMatI{Dimension} end
+@inline function ConstMatI{Dimension2}()::Matrix2D
+    return MatrixI2D
+end
+@inline function ConstMatI{Dimension3}()::Matrix3D
+    return MatrixI3D
+end
 
-@inline dot(A::Matrix3D, B::Matrix3D)::Float64 = LinearAlgebra.dot(A, B)
+# * ========== basic matrix operations ========== * #
+
+@inline dot(A::Matrix2D, B::Matrix2D)::Matrix2D = A * B
+@inline dot(A::Matrix3D, B::Matrix3D)::Matrix3D = A * B
+
+@inline ddot(A::Matrix2D, B::Matrix2D)::Float64 = LinearAlgebra.dot(A, B)
+@inline ddot(A::Matrix3D, B::Matrix3D)::Float64 = LinearAlgebra.dot(A, B)
 
 @inline function trace(A::Matrix2D)::Float64
     @inbounds return A[1] + A[4]

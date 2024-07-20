@@ -80,3 +80,14 @@ end
     end
     return nothing
 end
+
+@inline function applyReflection!(
+    particle_system::ParticleSystem{Dimension, ParticleType},
+    reflectionFunction!::Function;
+    parameters...,
+)::Nothing where {Dimension, ParticleType <: AbstractParticle{Dimension}}
+    Threads.@threads for i in eachindex(particle_system)
+        @inbounds reflectionFunction!(particle_system, particle_system[i]; parameters...)
+    end
+    return nothing
+end

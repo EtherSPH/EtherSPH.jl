@@ -45,6 +45,35 @@ const VectorX3D = VectorX(3)
 const VectorY3D = VectorY(3)
 const VectorZ3D = VectorZ(3)
 
+struct ConstVec0{Dimension} end
+@inline function ConstVec0{Dimension2}()::Vector2D
+    return Vector02D
+end
+@inline function ConstVec0{Dimension3}()::Vector3D
+    return Vector03D
+end
+
+struct ConstVecX{Dimension} end
+@inline function ConstVecX{Dimension2}()::Vector2D
+    return VectorX2D
+end
+@inline function ConstVecX{Dimension3}()::Vector3D
+    return VectorX3D
+end
+
+struct ConstVecY{Dimension} end
+@inline function ConstVecY{Dimension2}()::Vector2D
+    return VectorY2D
+end
+@inline function ConstVecY{Dimension3}()::Vector3D
+    return VectorY3D
+end
+
+struct ConstVecZ{Dimension} end
+@inline function ConstVecZ{Dimension3}()::Vector3D
+    return VectorZ3D
+end
+
 # * ========== basic vector operations ========== * #
 
 @inline function dot(x::Vector2D, y::Vector2D)::Float64

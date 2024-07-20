@@ -43,7 +43,7 @@ end
     @test A * B ≈ Matrix2D([19.0 22.0; 43.0 50.0])
     @test A * 2.0 ≈ Matrix2D([2.0 4.0; 6.0 8.0])
 
-    @test dot(A, B) ≈ 70.0
+    @test ddot(A, B) ≈ 70.0
 
     C = Matrix0(2)
     for i in 1:2, j in 1:2
@@ -63,7 +63,7 @@ end
     @test D * E ≈ Matrix3D([30.0 24.0 18.0; 84.0 69.0 54.0; 138.0 114.0 90.0])
     @test D * 2 ≈ Matrix3D([2.0 4.0 6.0; 8.0 10.0 12.0; 14.0 16.0 18.0])
 
-    @test dot(D, E) ≈ 165.0
+    @test ddot(D, E) ≈ 165.0
 
     @test trace(D) ≈ 15.0
     @test det(D) ≈ 0.0

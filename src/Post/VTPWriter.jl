@@ -76,7 +76,8 @@ end
     vtp_writer::VTPWriter,
     particle_system::ParticleSystem{Dimension, ParticleType},
     step::Int64,
-    simulation_time::Float64,
+    simulation_time::Float64;
+    field_dict::Dict{String, Any} = Dict{String, Any}(),
 )::Nothing where {Dimension, ParticleType <: AbstractParticle{Dimension}}
     n_particles = length(particle_system)
     type = zeros(Int64, n_particles)
@@ -105,6 +106,9 @@ end
     end
     for i in eachindex(vtp_writer.vector_name_list_)
         @inbounds vtp_file[vtp_writer.vector_name_list_[i]] = vectors_list[i]
+    end
+    for (key, value) in field_dict
+        vtp_file[key] = value
     end
     vtk_save(vtp_file)
     vtp_writer.output_count_ += 1

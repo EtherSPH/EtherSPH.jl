@@ -117,3 +117,32 @@ end
     end
     return nothing
 end
+
+# * ========== directly update neighbours ========== * #
+
+@inline function libDirectlyUpdateNeighbours!(
+    p::ParticleType;
+    particle_system::ParticleSystem{Dimension, ParticleType},
+)::Nothing where {Dimension, ParticleType <: AbstractParticle{Dimension}}
+    # NOTE: this function could be used in `apply...`
+    @simd for j in eachindex(p.neighbour_index_list_)
+        @inbounds q_index = p.neighbour_index_list_[j]
+        @inbounds p.neighbour_position_list_[j] .= p.x_vec_ .- particle_system[q_index]
+        @inbounds p.neighbour_distance_list_[j] = norm(p.neighbour_position_list_[j])
+    end
+    return nothing
+end
+
+@inline function directlyUpdateNeighbours!(
+    particle_system::ParticleSystem{Dimension, ParticleType},
+)::Nothing where {Dimension, ParticleType <: AbstractParticle{Dimension}}
+    Threads.@threads for i in eachindex(particle_system)
+        p = particle_system.particles_[i]
+        @simd for j in eachindex(p.neighbour_index_list_)
+            @inbounds q_index = p.neighbour_index_list_[j]
+            @inbounds p.neighbour_position_list_[j] .= p.x_vec_ .- particle_system[q_index]
+            @inbounds p.neighbour_distance_list_[j] = norm(p.neighbour_position_list_[j])
+        end
+    end
+    return nothing
+end
