@@ -23,6 +23,7 @@ pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple # us
 
 1. classical pde problems
     - [poisson equation](example/poisson_equation/poisson_equation.md)
+    - [single wave](example/single_wave/single_wave.md)
     - ...
 2. free surface problems
     - [collapse dry](example/collapse_dry/collapse_dry.md)

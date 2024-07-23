@@ -15,10 +15,10 @@
     - [x] compulsive wall force
     - [ ] periodic boundary in each dimension
         - [x] 1 dimension
-        - [ ] 2 dimension
-        - [ ] 3 dimensionb
+        - [x] 2 dimension
+        - [ ] 3 dimension
     - [ ] wall boundary
-    - [ ] buffer particle zone boundary
+    - [x] buffer particle zone boundary
     - [ ] ...
 3. Model
     - [x] linear elastic equation model (see hanging beam example)
@@ -39,8 +39,7 @@
     - [ ] ...
 5. Example
     - [x] poisson equation
-        - [x] 1D
-        - [x] 2D
+    - [x] single wave
     - [x] hydrostatic pressure
     - [x] collapse dry
     - [x] cruchaga

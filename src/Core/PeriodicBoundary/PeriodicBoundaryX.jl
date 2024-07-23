@@ -10,48 +10,19 @@
     displacement = Vector2D(0.0, 0.0)
     displacement[1] = cell_link_list.calculation_domain_box_.range_[1]
     Threads.@threads for j in 1:ny
-        addNeighbour!(
-            cell_link_list.cells_[1, j],
-            CartesianIndex2D(nx, j);
-            relative_position_displacement = displacement,
-        )
-        addNeighbour!(
-            cell_link_list.cells_[nx, j],
-            CartesianIndex2D(1, j);
-            relative_position_displacement = -displacement,
-        )
-        if j == 1
-            addNeighbour!(
-                cell_link_list.cells_[1, 1],
-                CartesianIndex2D(nx, 2);
-                relative_position_displacement = displacement,
-            )
-            addNeighbour!(
-                cell_link_list.cells_[nx, 1],
-                CartesianIndex2D(1, 2);
-                relative_position_displacement = -displacement,
-            )
-        elseif j == ny
-            addNeighbour!(
-                cell_link_list.cells_[1, ny],
-                CartesianIndex2D(nx, ny - 1);
-                relative_position_displacement = displacement,
-            )
-            addNeighbour!(
-                cell_link_list.cells_[nx, ny],
-                CartesianIndex2D(1, ny - 1);
-                relative_position_displacement = -displacement,
-            )
-        else
-            for delta_j in [-1, 1]
+        for delta_j in -1:1
+            j_ = j + delta_j
+            if j_ < 1 || j_ > ny
+                continue
+            else
                 addNeighbour!(
                     cell_link_list.cells_[1, j],
-                    CartesianIndex2D(nx, j + delta_j);
+                    CartesianIndex2D(nx, j_);
                     relative_position_displacement = displacement,
                 )
                 addNeighbour!(
                     cell_link_list.cells_[nx, j],
-                    CartesianIndex2D(1, j + delta_j);
+                    CartesianIndex2D(1, j_);
                     relative_position_displacement = -displacement,
                 )
             end

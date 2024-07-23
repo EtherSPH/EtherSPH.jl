@@ -10,7 +10,39 @@ All notable changes to this project will be documented in this file. The format 
 
 ---
 
-## [0.1.0] - 2024-07-xx
+## [0.1.0] - 2024-07-23
+
+### Brief
+
+#### More periodic boundary conditions
+
+In the previous version, we introduced periodic boundary conditions in one `x` direction for 2D and 3D cases. In this version, we add periodic boundary conditions in both `x` and `y` directions for 2D cases. And single periodic direction can be added for `y` or `z` direction in both 2D and 3D cases.
+
+#### Model pde: single wave
+
+My tutor once required me to solve the propogation of sound using SPH method. Although it's of none sense for SPH focues on Lagrangian view, I still try to solve the single wave propogation in 2D case. See `example/single_wave/single_wave_2d.jl`. The results shows that particle discretization is accurate in some aspect.
+
+### Added
+
+- Periodic boundary condition in one direction at each dimension. See `Core/PeriodicBoundary/PeriodicBoundary.jl` for details.
+- Periodic boundary condition in both `x` and `y` direction in 2D case. See `Core/PeriodicBoundary/PeriodicBoundaryXY.jl` for details.
+- `example/single_wave` folder for single wave propogation in 2D case.
+
+### Changed
+
+- move `Core/PeriodicBoundary.jl` to `Core/PeriodicBoundary/PeriodicBoundary.jl`
+
+### Fixed
+
+- Nothing
+
+### Removed
+
+- Nothing
+
+---
+
+## [0.1.0] - 2024-07-20
 
 ### Brief
 
