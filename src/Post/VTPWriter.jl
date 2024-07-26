@@ -114,3 +114,48 @@ end
     vtp_writer.output_count_ += 1
     return nothing
 end
+
+@inline function splitParticlesType(vtp_writer::VTPWriter; type_name_dict::Dict{Int64, String} = Dict())::Nothing
+    try
+        pv = PyCall.pyimport("pyvista")
+    catch e
+        @warn "Please install `pyvista` in your python env before calling this function. Installation command:  `pip install pyvista`."
+        return nothing
+    end
+    if !isdir(vtp_writer.output_path_)
+        @warn "The output path does not exist, please check the path."
+        return nothing
+    end
+    pv = PyCall.pyimport("pyvista")
+    file_name_list = readdir(vtp_writer.output_path_)
+    file_name_pattern = Regex("$(vtp_writer.file_name_)\\d{$(vtp_writer.step_digit_)}\\.vtp")
+    file_name_list = filter(file_name -> occursin(file_name_pattern, file_name), file_name_list)
+    if length(file_name_list) == 0
+        @warn "No file in the output path. Please do the simulation first."
+        return nothing
+    end
+    py"""
+    types = lambda poly_data: poly_data.point_data["Type"]
+    """
+    types = py"types"(pv.read(joinpath(vtp_writer.output_path_, file_name_list[1])))
+    type_min, type_max = extrema(types)
+    for type in type_min:type_max
+        if type in keys(type_name_dict)
+            type_name_dict[type] *= "_"
+            continue
+        else
+            type_name_dict[type] = "ParticleType_$(type)_"
+        end
+    end
+    @info "Splitting particles by type..."
+    for i in ProgressBar(1:length(file_name_list))
+        file_name = file_name_list[i]
+        poly_data = pv.read(joinpath(vtp_writer.output_path_, file_name))
+        types = py"types"(poly_data)
+        for (type, type_name) in type_name_dict
+            save_file_name = joinpath(vtp_writer.output_path_, replace(type_name * file_name, ".vtp" => ".vtk"))
+            poly_data.extract_points(types .== type).save(save_file_name)
+        end
+    end
+    return nothing
+end

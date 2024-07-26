@@ -10,6 +10,52 @@ All notable changes to this project will be documented in this file. The format 
 
 ---
 
+## [0.1.0] - 2024.07.06
+
+### Brief
+
+
+
+#### Split Particles by Type
+
+Sometimes post process requires to split particles by type. Using `PyCall`, I import [`pyvsita`](https://docs.pyvista.org/) to read `.vtp` and split particles by type into different vtk files. The code is shown as below:
+
+```julia
+splitParticlesType(
+    vtp_writer;
+    type_name_dict = Dict(
+        1 => "Water", 
+        2 => "Wall", 
+        3 => "Beam_Move", 
+        4 => "Beam_Fixed"),
+)
+```
+
+When `type_name_dict` is not given, the default type name is `Particle_1_xxx.vtk`, `Particle_2_xxx.vtk`, etc. However, such function requires user to add `PyCall` in their python environment which is correctly configured with julia.
+
+#### Marching towards FSI
+
+FSI problem is interesting and can not be solved easily by traditional numerical methods. I start to march towards FSI problem. A simple FSI problem from [An SPH‑based FSI framework for phase‑feld modeling of brittle fracture under extreme hydrodynamic events](https://link.springer.com/10.1007/s00366-023-01857-0) is included in demo and waits for further validation. Although I should not publish this version since it's not been validated, the `splitParticlesType` function matters more for other users, which makes me decide to push this version into the main branch.
+
+### Added
+
+- `Post/VTPWriter.jl/splitParticlesType` function to split particles by type into different vtk files.
+- `demo/fsi_water_onto_obstacle` is added.
+
+### Changed
+
+- Nothing
+
+### Fixed
+
+- Nothing
+
+### Removed
+
+- Nothing
+
+---
+
 ## [0.1.0] - 2024-07-23
 
 ### Brief
