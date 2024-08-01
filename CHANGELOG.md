@@ -10,11 +10,42 @@ All notable changes to this project will be documented in this file. The format 
 
 ---
 
-## [0.1.0] - 2024.07.06
+## [0.1.0] - 2024.08.01
 
 ### Brief
 
+#### Example: Flow Over Cylinder
 
+Use pressure extrapolation method to handle wall boundary, and add a new boundary: **buffer + periodic** which fits the reference well.
+
+#### Pressure Force
+
+In `SPH/Library/PressureForce.jl`, a density weighted pressure force is added which implies: $p^* = (p_i\rho_i + p_j\rho_j)/(\rho_i + \rho_j)$. Also, pressure extrapolation for wall boundary is added. 
+
+### Added
+
+- `SPH/Library/PressureForce.jl` adds `libDensityWeightedPressureForce!` function to calculate density weighted pressure force.
+- `SPH/Library/PressureForce.jl` adds `libPressureExtrapolationInteraction!` function to apply pressure extrapolation for wall boundary.
+- `SPH/Library/PressureForce.jl` adds `libPressureExtrapolationSelfaction!` function to apply pressure extrapolation for wall boundary.
+- `example/cylinder` adds some case and updates `cylinder.md`.
+
+### Changed
+
+- Nothing
+
+### Fixed
+
+- Nothing
+
+### Removed
+
+- Nothing
+
+---
+
+## [0.1.0] - 2024.07.26
+
+### Brief
 
 #### Split Particles by Type
 

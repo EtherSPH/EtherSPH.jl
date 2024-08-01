@@ -10,6 +10,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import pyvista as pv
+from scipy.fftpack import fft
 pv.set_jupyter_backend("static")
 pv.start_xvfb()
 
@@ -68,6 +69,58 @@ class Cylinder2DPostProcess:
         plotter.add_text(f"Time: {t:.4f} s  Step: {step}", font_size=15, position="upper_edge")
         plotter.camera_position = "xy"
         plotter.screenshot(os.path.join(self.working_directory, f"image/{POST_NAME}_" + self.key_word + "_cmap.png"))
+        pass
+    
+    def clcdPlot(self) -> None:
+        csv_file_name: str = os.path.join(self.working_directory, f"../results/cylinder/{POST_NAME}_" + self.key_word + "/cl_cd.csv")
+        df: pd.DataFrame = pd.read_csv(csv_file_name)
+        t: np.ndarray = df["time"].values
+        cl: np.ndarray = df["cl"].values
+        cd: np.ndarray = df["cd"].values
+        n: int = len(t)
+        start: int = n // 2
+        end: int = n - 1
+        mean_cl: float = np.mean(cl[start:end])
+        mean_cd: float = np.mean(cd[start:end])
+        plt.figure(figsize=(12, 10), facecolor="white")
+        plt.subplot(2, 2, 1)
+        plt.plot(t, cl, label="cl")
+        plt.hlines(mean_cl, t[0], t[end], color="r", linestyle="--", label=f"mean cl: {mean_cl:.4f}")
+        plt.title("Lift Coefficient")
+        plt.xlabel("Time [s]")
+        plt.ylabel("Cl")
+        plt.legend()
+        plt.grid(True)
+        plt.subplot(2, 2, 2)
+        plt.plot(t, cd, label="cd")
+        plt.hlines(mean_cd, t[0], t[end], color="r", linestyle="--", label=f"mean cd: {mean_cd:.4f}")
+        plt.title("Drag Coefficient")
+        plt.ylabel("Cd")
+        plt.legend()
+        plt.ylim(mean_cd - 2, mean_cd + 2)
+        plt.xlabel("Time [s]")
+        plt.grid(True)
+        dt: float = t[1] - t[0]
+        f = np.linspace(0, 1 / dt, n)
+        cl_fft = fft(cl)
+        cd_fft = fft(cd)
+        cl_fft = np.abs(cl_fft[:n // 2])
+        cd_fft = np.abs(cd_fft[:n // 2])
+        plt.subplot(2, 2, 3)
+        plt.plot(f[:n // 2], cl_fft, label="cl")
+        plt.title("Lift Coefficient FFT")
+        plt.xlabel("Frequency [Hz]")
+        plt.ylabel("Cl")
+        plt.grid(True)
+        plt.xlim(0, 10)
+        plt.subplot(2, 2, 4)
+        plt.plot(f[:n // 2], cd_fft, label="cd")
+        plt.title("Drag Coefficient FFT")
+        plt.ylabel("Cd")
+        plt.xlabel("Frequency [Hz]")
+        plt.xlim(0, 10)
+        plt.grid(True)
+        plt.savefig(os.path.join(self.working_directory, f"image/{POST_NAME}_" + self.key_word + "_cl_cd.png"), bbox_inches="tight", dpi=300)
         pass
     
     pass
