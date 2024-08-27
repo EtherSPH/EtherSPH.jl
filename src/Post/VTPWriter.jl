@@ -40,6 +40,21 @@ end
     getVectorFunctions_::Vector{Function} = Function[]
 end
 
+@inline function setStepDigit!(vtp_writer::VTPWriter, step_digit::Int64)::Nothing
+    vtp_writer.step_digit_ = step_digit
+    return nothing
+end
+
+@inline function setFileName!(vtp_writer::VTPWriter, file_name::String)::Nothing
+    vtp_writer.file_name_ = file_name
+    return nothing
+end
+
+@inline function setOutputPath!(vtp_writer::VTPWriter, output_path::String)::Nothing
+    vtp_writer.output_path_ = output_path
+    return nothing
+end
+
 Base.show(io::IO, vtp_writer::VTPWriter) = print(
     io,
     "VTPWriter:\n",

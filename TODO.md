@@ -26,7 +26,7 @@
     - [ ] arbitray constitutive relation
     - [ ] fsi (fluid-solid interaction)
         - [x] fluid-rigid body interaction
-        - [ ] fluid-elastic body interaction
+        - [x] fluid-elastic body interaction
         - [ ] ...
     - [ ] rigid body dynamics
         - [x] 2D rigid body dynamics

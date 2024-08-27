@@ -13,10 +13,12 @@ const Dimension3 = 3
 
 using StaticArrays
 import LinearAlgebra # LinearAlgebra import, instead of using.
+using FLoops
 using Parameters
 using Dates
 using WriteVTK
 using ProgressBars
+using ProgressMeter
 using PyCall
 using ExportAll
 

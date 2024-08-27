@@ -10,6 +10,51 @@ All notable changes to this project will be documented in this file. The format 
 
 ---
 
+## [0.1.0] - 2024.08.27
+
+### Brief
+
+#### FSI: Cylinder with Plate
+
+A fluid-structure interaction problem is solved. The cylinder is fixed and the plate is free to move. It's a classic problem in fluid-structure interaction. The fluid is incompressible and the flow is laminar. The Reynolds number varies in $20, 100, 200$, marked as fsi1, fsi2 and fsi3.
+
+See [fsi_cylinder_with_plate](example/fsi_cylinder_with_plate/fsi_cylinder_with_plate.md) for details.
+
+#### `Project.toml`
+
+Add `FLoops` and `ProgressMeter` package for adaptive time step in simulations.
+
+`FLoop.jl` package is used to collect the time step information in the simulation. `ProgressMeter.jl` package is used to show the progress with unknown total steps.
+
+#### `collectmin` and `collectmax`
+
+`collectmin` and `collectmax` are added in `src/Core`. They are used to collect the minimum and maximum value particle system.
+
+#### Some functions for `VTPWriter`
+
+`VTPWriter` is used to write the vtk file. Some functions are added to write the field data in the vtk file.
+
+### Added
+
+- `FLoops` and `ProgressMeter` in `Project.toml`.
+- `Core/Collect.jl` adds `collectmin` and `collectmax` functions to collect the minimum and maximum value particle system.
+- `example/fsi_cylinder_with_plate` adds fluid-structure interaction problem: cylinder with plate.
+- `Post/VTPWriter.jl` adds `setStepDigit!`, `setFileName!` and `setOutputPath!` functions to modify the output file name and path.
+
+### Changed
+
+- Nothing
+
+### Fixed
+
+- Nothing
+
+### Removed
+
+- Nothing
+
+---
+
 ## [0.1.0] - 2024.08.01
 
 ### Brief
