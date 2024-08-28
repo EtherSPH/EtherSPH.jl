@@ -48,4 +48,5 @@ pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple # us
 7. fsi (fluid-structure interaction) problems
     - [floating object](example/floating_object/floating_object.md)
     - [fsi: cylinder with plate](example/fsi_cylinder_with_plate/fsi_cylinder_with_plate.md)
+    - [fsi: dam break onto obstacle](example/fsi_dam_break_onto_obstacle/fsi_dam_break_onto_obstacle.md)
     - ...

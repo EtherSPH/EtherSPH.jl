@@ -43,7 +43,7 @@ And the mean velocity is:
 $$
 \begin{equation}
     u_{\text{mean}} = \frac{1}{h}
-    \int_0^h u \, \mathrm{d}y = \frac{f_x}{12\mu}h^2
+    \int_0^h u \mathrm{d}y = \frac{f_x}{12\mu}h^2
 \end{equation}
 $$
 
