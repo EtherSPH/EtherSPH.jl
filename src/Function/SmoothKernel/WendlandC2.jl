@@ -5,8 +5,8 @@
   @ description:
  =#
 
-kWendlandC2RadiusRatio = 2.0
-kWendlandC2SigmaList = [0.0, 7.0 / 4.0 / pi, 21.0 / 16.0 / pi]
+const kWendlandC2RadiusRatio = 2.0
+const kWendlandC2SigmaList = [0.0, 7.0 / 4.0 / pi, 21.0 / 16.0 / pi]
 
 struct WendlandC2{Dimension} <: SmoothKernel{Dimension}
     h_::Float64
