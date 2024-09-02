@@ -43,7 +43,7 @@ pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple # us
     - [hanging beam](example/hanging_beam/hanging_beam.md)
     - ...
 6. rigid body problems
-    - [rigid boody](example/rigid_body/rigid_body.md)
+    - [rigid body](example/rigid_body/rigid_body.md)
     - ...
 7. fsi (fluid-structure interaction) problems
     - [floating object](example/floating_object/floating_object.md)
