@@ -10,7 +10,7 @@ All notable changes to this project will be documented in this file. The format 
 
 ---
 
-## [0.1.0] - 2024.09.10
+## [0.1.0] - 2024.09.13
 
 ### Brief
 
@@ -30,6 +30,10 @@ Welcome [`MaiZLnuaa`](mai-zl@nuaa.edu.cn) to join the project!
 
 $\delta$-SPH is introduced to filter the density in SPH method. See `SPH/Cart/DeltaSPH.jl` for details. And a demo in [collapse dry](example/collapse_dry/collapse_dry_extrapolation_delta_sph.jl) is included.
 
+#### `applyInteractionByKernelGradient!`: An important function in `src/Core/Apply.jl`
+
+`applyInteractionByKernelGradient!` is introduced to apply interaction by kernel gradient. As the kernel gradient $\nabla W_{ij}$ can be called several times in the interaction, it's recommended to calculate the kernel gradient first and store them. Thus, `applyInteractionByKernelGradient!` is introduced to parse `kernel_gradient` into the interaction function. You may see the change in file [Apply.jl](src/Core/Apply.jl).
+
 ### Added
 
 - `Post/VTPWriter.jl` adds `use_binary` choice in `splitParticlesType` function.
@@ -37,6 +41,7 @@ $\delta$-SPH is introduced to filter the density in SPH method. See `SPH/Cart/De
 - `example/fsi_dam_break_onto_obstacle` adds fluid-structure interaction problem: dambreak onto obstacle.
 - `example/collapse_dry` adds `collapse_dry_extrapolation_delta_sph.jl` to show how to use $\delta$-SPH in SPH method.
 - `demo/dam_break_2d/dam_break_2d_delta_sph.jl` is added to show how to use $\delta$-SPH in SPH method.
+- `Core/Apply.jl` adds `applyInteractionByKernelGradient!` function to apply interaction by kernel gradient.
 
 ### Changed
 
