@@ -35,6 +35,7 @@
     - [ ] ...
 4. Trick
     - [x] kernel average density filter
+    - [x] $\delta$ SPH
     - [ ] XSPH
     - [ ] ...
 5. Example

@@ -81,6 +81,29 @@ end
     return nothing
 end
 
+@inline function applyInteractionByKernelGradient!(
+    particle_system::ParticleSystem{Dimension, ParticleType},
+    interactionFunction!::Function;
+    parameters...,
+)::Nothing where {Dimension, ParticleType <: AbstractParticle{Dimension}}
+    # ! almost the same as `applyInteractionWithNeighbours!`, but with kernel gradient
+    Threads.@threads for i in eachindex(particle_system)
+        p = particle_system[i]
+        @inbounds for j in eachindex(p.neighbour_kernel_gradient_list_)
+            q_index = p.neighbour_index_list_[j]
+            interactionFunction!(
+                p,
+                particle_system.particles_[q_index],
+                p.neighbour_position_list_[j],
+                p.neighbour_distance_list_[j];
+                kernel_gradient = p.neighbour_kernel_gradient_list_[j],
+                parameters...,
+            )
+        end
+    end
+    return nothing
+end
+
 @inline function applyReflection!(
     particle_system::ParticleSystem{Dimension, ParticleType},
     reflectionFunction!::Function;

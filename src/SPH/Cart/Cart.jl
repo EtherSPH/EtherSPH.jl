@@ -6,3 +6,4 @@
  =#
 
 include("LargeDeformationContinuumMechanics.jl")
+include("DeltaSPH.jl")

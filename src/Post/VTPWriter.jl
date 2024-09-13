@@ -130,7 +130,11 @@ end
     return nothing
 end
 
-@inline function splitParticlesType(vtp_writer::VTPWriter; type_name_dict::Dict{Int64, String} = Dict())::Nothing
+@inline function splitParticlesType(
+    vtp_writer::VTPWriter;
+    type_name_dict::Dict{Int64, String} = Dict{Int64, String}(),
+    use_binary::Bool = true,
+)::Nothing
     try
         pv = PyCall.pyimport("pyvista")
     catch e
@@ -169,7 +173,7 @@ end
         types = py"types"(poly_data)
         for (type, type_name) in type_name_dict
             save_file_name = joinpath(vtp_writer.output_path_, replace(type_name * file_name, ".vtp" => ".vtk"))
-            poly_data.extract_points(types .== type).save(save_file_name)
+            poly_data.extract_points(types .== type).save(save_file_name, binary = use_binary)
         end
     end
     return nothing

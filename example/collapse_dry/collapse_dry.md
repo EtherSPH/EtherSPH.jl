@@ -107,3 +107,43 @@ $$
 
 > *what's good?*: No blank gap between wall and fluid particles. Fit for all kind of wall material (any value of density is allowed). No need to generate normal vector.
 > *what's bad?*: a little bit unstable than the other 2 methods mentioned above. -- 2024.07.11 
+
+## $\delta$-SPH Density Filter
+
+- [Free-surface flows solved by means of SPH schemes with numerical diffusive terms](https://linkinghub.elsevier.com/retrieve/pii/S0010465509003506)
+- [Propagation of gravity waves through an SPH scheme with numerical diffusive terms](https://linkinghub.elsevier.com/retrieve/pii/S0010465510004911)
+- [Numerical diffusive terms in weakly-compressible SPH schemes](https://linkinghub.elsevier.com/retrieve/pii/S0010465512002342)
+- [δ-SPH model for simulating violent impact flows](https://linkinghub.elsevier.com/retrieve/pii/S0045782510003725)
+- [Enhancement of δ-SPH for ocean engineering applications through incorporation of a background mesh scheme](https://linkinghub.elsevier.com/retrieve/pii/S0141118720310671)
+
+An additional term is added to continuity equation to filter the density.
+
+$$
+\begin{equation}
+    \begin{aligned}
+        \left(\frac{\mathrm{d}\rho}{\mathrm{d}t}\right)_i &= 
+        \sum_j\rho_i\frac{m_j}{\rho_j}\vec{v}_{ij}\cdot \nabla W_{ij} + \delta h c_0 \sum_j \frac{m_j}{\rho_j} D_{ij}\cdot \nabla W_{ij}\\
+        D_{ij} &= -2(\rho_j - \rho_i)\frac{\vec{r}_{ij}}{r_{ij}^2} - (\nabla \rho^L_i + \nabla \rho^L_j)\\
+        \nabla \rho^L_i &= \sum_j \frac{m_j}{\rho_j}(\rho_j - \rho_i)L_i\nabla W_{ij}\\
+        L_i &= \left[
+            \sum_j -\frac{m_j}{\rho_j}\vec{r}_{ij}\otimes \nabla W_{ij}
+        \right]^{-1}
+    \end{aligned}
+\end{equation}
+$$
+
+$\delta$-SPH is a density filter method to assure numerical stability.
+
+<center>
+<image src="image/collapse_dry_extrapolation_delta_sph_reference.png" width=70%>
+</br>
+<b>fig. collapse onto a dry bottom - δ-SPH density filter</b>
+</center>
+
+<center>
+<image src="image/collapse_dry_extrapolation_delta_sph_cmap.png" width=70%>
+</br>
+<b>fig. collapse onto a dry bottom - δ-SPH density filter</b>
+</center>
+
+> It's good to see that $\delta$-SPH can solve the negative pressure problem. However, it;s expansive in calculation. -- 2024.09.13

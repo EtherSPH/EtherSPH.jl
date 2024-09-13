@@ -10,6 +10,48 @@ All notable changes to this project will be documented in this file. The format 
 
 ---
 
+## [0.1.0] - 2024.09.10
+
+### Brief
+
+#### FSI: Dambreak onto Obstacle
+
+A fluid-structure interaction problem is solved. See [fsi dambreak onto obstacle](example/fsi_dam_break_onto_obstacle/fsi_dam_break_onto_obstacle.md) for details.
+
+#### `VTPWriter` for `binary` choice
+
+As `vtk` file can be either stored in `ascii` or `binary` format, `VTPWriter` is updated to support `use_binary` choice when calling `splitParticlesType`.
+
+#### New Author
+
+Welcome [`MaiZLnuaa`](mai-zl@nuaa.edu.cn) to join the project!
+
+#### $\delta$-SPH
+
+$\delta$-SPH is introduced to filter the density in SPH method. See `SPH/Cart/DeltaSPH.jl` for details. And a demo in [collapse dry](example/collapse_dry/collapse_dry_extrapolation_delta_sph.jl) is included.
+
+### Added
+
+- `Post/VTPWriter.jl` adds `use_binary` choice in `splitParticlesType` function.
+- `SPH/Cart/DeltaSPH.jl` adds $\delta$-SPH to filter the density in SPH method.
+- `example/fsi_dam_break_onto_obstacle` adds fluid-structure interaction problem: dambreak onto obstacle.
+- `example/collapse_dry` adds `collapse_dry_extrapolation_delta_sph.jl` to show how to use $\delta$-SPH in SPH method.
+- `demo/dam_break_2d/dam_break_2d_delta_sph.jl` is added to show how to use $\delta$-SPH in SPH method.
+
+### Changed
+
+- Nothing
+
+### Fixed
+
+- Nothing
+
+### Removed
+
+- Nothing
+
+---
+
 ## [0.1.0] - 2024.08.27
 
 ### Brief
