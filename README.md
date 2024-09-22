@@ -2,6 +2,8 @@
 
 Maybe the last version in julia, largely thanks to [SmoothedParticles.jl](https://github.com/OndrejKincl/SmoothedParticles.jl).
 
+`EtherSPH.jl` is a Smoothed Particle Hydrodynamics (SPH) code written in Julia. It is designed to be a general-purpose SPH code that can be used to simulate a wide range of problems in fluid dynamics, solid mechanics, and fluid-structure interaction. The code is designed to be easy to use and easy to extend, with a focus on readability and simplicity. As ether was once considered to be a particle-like medium that permeated all of space which was proved to be non-existent, the name `EtherSPH` is chosen to reflect the particle-based nature of the simulation method.
+
 # Setup
 
 In julia repl, type:
